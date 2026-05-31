@@ -62,7 +62,7 @@ export const Orders: CollectionConfig = {
                 
                 <h3 style="margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px;">Order Details</h3>
                 <ul style="list-style-type: none; padding: 0;">
-                  ${items.map(item => `
+                  ${items.map((item: { name: string; quantity: number; price: number; product: unknown }) => `
                     <li style="margin-bottom: 10px; display: flex; justify-content: space-between; border-bottom: 1px dashed #eee; padding-bottom: 5px;">
                       <span>${item.name} (Qty: ${item.quantity})</span>
                       <strong>PKR ${(item.price * item.quantity).toLocaleString()}</strong>
