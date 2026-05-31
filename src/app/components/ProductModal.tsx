@@ -30,8 +30,13 @@ export function ProductModal({ product, onClose, whatsapp = "923001234567" }: Pr
     setMounted(true);
     const originalOverflow = window.getComputedStyle(document.body).overflow;
     document.body.style.overflow = "hidden";
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
       document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
@@ -72,6 +77,7 @@ export function ProductModal({ product, onClose, whatsapp = "923001234567" }: Pr
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
       style={{ background: "rgba(0,0,0,0.85)", backdropFilter: "blur(12px)" }}
+      onClick={onClose}
     >
       {/* Modal Box */}
       <div
@@ -82,6 +88,7 @@ export function ProductModal({ product, onClose, whatsapp = "923001234567" }: Pr
           boxShadow: "0 10px 50px rgba(0,0,0,0.6)",
           maxHeight: "92vh",
         }}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
         <button

@@ -100,8 +100,13 @@ export function ProjectGallery({ projects, whatsapp = "923001234567" }: ProjectG
     if (activeProject) {
       const originalOverflow = window.getComputedStyle(document.body).overflow;
       document.body.style.overflow = "hidden";
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") setActiveProject(null);
+      };
+      window.addEventListener("keydown", handleKeyDown);
       return () => {
         document.body.style.overflow = originalOverflow;
+        window.removeEventListener("keydown", handleKeyDown);
       };
     }
   }, [activeProject]);
@@ -311,6 +316,7 @@ export function ProjectGallery({ projects, whatsapp = "923001234567" }: ProjectG
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
           style={{ background: "rgba(0,0,0,0.85)", backdropFilter: "blur(8px)" }}
+          onClick={() => setActiveProject(null)}
         >
           {/* Modal Container */}
           <div
@@ -321,6 +327,7 @@ export function ProjectGallery({ projects, whatsapp = "923001234567" }: ProjectG
               boxShadow: "0 10px 50px rgba(0,0,0,0.5)",
               maxHeight: "90vh",
             }}
+            onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
             <button
