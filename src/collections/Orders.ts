@@ -44,6 +44,13 @@ export const Orders: CollectionConfig = {
 
           // Send confirmation email
           try {
+            const itemsHtml: string = items.map((item: { name: string; quantity: number; price: number; product: unknown }) =>
+              `<li style="margin-bottom: 10px; display: flex; justify-content: space-between; border-bottom: 1px dashed #eee; padding-bottom: 5px;">
+                <span>${item.name} (Qty: ${item.quantity})</span>
+                <strong>PKR ${(item.price * item.quantity).toLocaleString()}</strong>
+              </li>`
+            ).join('');
+
             const htmlMessage = `
               <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e1e1e1; border-radius: 8px;">
                 <div style="text-align: center; padding: 20px 0 10px 0; border-bottom: 2px solid #e8192c; margin-bottom: 20px;">
@@ -59,17 +66,12 @@ export const Orders: CollectionConfig = {
                 <h2 style="text-align: center; padding-bottom: 10px;">Order Confirmation</h2>
                 <p>Hi <strong>${doc.customerName}</strong>,</p>
                 <p>Thank you for placing an order with Hakai Motives! We have received your order and are currently processing it.</p>
-                
+
                 <h3 style="margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px;">Order Details</h3>
                 <ul style="list-style-type: none; padding: 0;">
-                  ${items.map((item: { name: string; quantity: number; price: number; product: unknown }) => `
-                    <li style="margin-bottom: 10px; display: flex; justify-content: space-between; border-bottom: 1px dashed #eee; padding-bottom: 5px;">
-                      <span>${item.name} (Qty: ${item.quantity})</span>
-                      <strong>PKR ${(item.price * item.quantity).toLocaleString()}</strong>
-                    </li>
-                  `).join('')}
+                  ${itemsHtml}
                 </ul>
-                
+
                 <div style="margin-top: 20px; font-size: 18px; text-align: right;">
                   <strong>Total: <span style="color: #e8192c;">PKR ${doc.total.toLocaleString()}</span></strong>
                 </div>
