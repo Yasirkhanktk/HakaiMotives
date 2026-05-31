@@ -39,8 +39,9 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
 
   return (
     <div
-      className="group rounded-lg overflow-hidden flex flex-col transition-all duration-300"
+      className="group rounded-lg overflow-hidden flex flex-col transition-all duration-300 cursor-pointer"
       style={{ background: "#111", border: "1px solid #1e1e1e" }}
+      onClick={() => onAddToCart(product)}
       onMouseEnter={e => (e.currentTarget.style.borderColor = "#333")}
       onMouseLeave={e => (e.currentTarget.style.borderColor = "#1e1e1e")}
     >
@@ -58,7 +59,10 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
           style={{ background: "rgba(0,0,0,0.5)" }}
         >
           <button
-            onClick={() => onAddToCart(product)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onAddToCart(product);
+            }}
             className="flex items-center gap-2 px-4 py-2 rounded transition-all duration-200"
             style={{ background: "#e8192c", color: "#fff", fontFamily: "Rajdhani, sans-serif", fontWeight: 700, fontSize: "12px", letterSpacing: "2px", border: "none", cursor: "pointer" }}
             onMouseEnter={e => (e.currentTarget.style.background = "#c0000f")}
@@ -84,7 +88,10 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
 
         {/* Wishlist */}
         <button
-          onClick={() => setWished(!wished)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setWished(!wished);
+          }}
           className="absolute top-2 right-2 w-7 h-7 flex items-center justify-center rounded-full transition-all duration-200"
           style={{ background: wished ? "#e8192c" : "rgba(0,0,0,0.5)", border: "none", cursor: "pointer" }}
         >
@@ -132,7 +139,10 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
             )}
           </div>
           <button
-            onClick={() => onAddToCart(product)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onAddToCart(product);
+            }}
             className="w-8 h-8 flex items-center justify-center rounded transition-all duration-200"
             style={{ background: "#e8192c", border: "none", cursor: "pointer" }}
             onMouseEnter={e => (e.currentTarget.style.background = "#c0000f")}

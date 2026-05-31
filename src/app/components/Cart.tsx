@@ -117,7 +117,7 @@ export function Cart({ whatsapp = "923001234567" }: CartProps) {
 
   // Generate Whatsapp tracking message
   const whatsappTrackText = encodeURIComponent(
-    `Hi Hassan! I have placed an order on Hakai Motives.\n\nOrder ID: ${orderId}\nName: ${address.name}\nPhone: ${address.phone}\nItems: ${items.map(i => `${i.name} (Qty: ${i.quantity})`).join(", ")}\nTotal: PKR ${total.toLocaleString()}\n\nPlease confirm my order. Thanks!`
+    `Hi Hassan! I have placed an order on Hakai Motives.\n\nOrder ID: ${orderId}\nName: ${address.name}\nPhone: ${address.phone}\nItems: ${items.map(i => `${i.name} (Qty: ${i.quantity})`).join(", ")}\nTotal: PKR ${total.toLocaleString()}\nPayment Method: ${paymentMethod === "COD" ? "Cash on Delivery" : "Online Payment (Proof attached)"}\n\nPlease confirm my order. Thanks!`
   );
 
   const cartStyle: React.CSSProperties = isMobile
@@ -293,30 +293,95 @@ export function Cart({ whatsapp = "923001234567" }: CartProps) {
           {step === "payment" && (
             <div className="p-5 flex flex-col gap-4">
               <p style={{ fontFamily: "Inter, sans-serif", color: "#888", fontSize: "13px" }}>Select your payment method:</p>
-              {[
-                { id: "cod", label: "Cash on Delivery", desc: "Pay when you receive your order" },
-                { id: "easypaisa", label: "Easypaisa / JazzCash", desc: `Send to: 0300-1234567 (Hassan Nawaz)` },
-                { id: "bank", label: "Bank Transfer", desc: "Account details shared via WhatsApp" },
-              ].map((method) => {
-                const isSelected = paymentMethod === method.id.toUpperCase();
-                return (
-                  <div
-                    key={method.id}
-                    onClick={() => setPaymentMethod(method.id.toUpperCase())}
-                    className="p-4 rounded-lg cursor-pointer transition-all duration-200"
-                    style={{ 
-                      background: isSelected ? "rgba(232, 25, 44, 0.05)" : "#141414", 
-                      border: isSelected ? "2px solid #e8192c" : "1px solid #2a2a2a" 
-                    }}
-                  >
-                    <p style={{ fontFamily: "Rajdhani, sans-serif", color: isSelected ? "#e8192c" : "#ddd", fontWeight: 600, fontSize: "14px" }}>{method.label}</p>
-                    <p style={{ fontFamily: "Inter, sans-serif", color: "#666", fontSize: "12px" }}>{method.desc}</p>
+              
+              <div className="flex flex-col gap-3">
+                {/* Cash on Delivery */}
+                <div
+                  onClick={() => setPaymentMethod("COD")}
+                  className="p-4 rounded-lg cursor-pointer transition-all duration-200"
+                  style={{ 
+                    background: paymentMethod === "COD" ? "rgba(232, 25, 44, 0.05)" : "#141414", 
+                    border: paymentMethod === "COD" ? "2px solid #e8192c" : "1px solid #2a2a2a" 
+                  }}
+                >
+                  <div className="flex items-center justify-between">
+                    <p style={{ fontFamily: "Rajdhani, sans-serif", color: paymentMethod === "COD" ? "#e8192c" : "#ddd", fontWeight: 600, fontSize: "15px", letterSpacing: "1px" }}>
+                      CASH ON DELIVERY (COD)
+                    </p>
+                    <div className="w-4 h-4 rounded-full border flex items-center justify-center" style={{ borderColor: paymentMethod === "COD" ? "#e8192c" : "#555" }}>
+                      {paymentMethod === "COD" && <div className="w-2 h-2 rounded-full" style={{ background: "#e8192c" }} />}
+                    </div>
                   </div>
-                );
-              })}
+                  <p style={{ fontFamily: "Inter, sans-serif", color: "#666", fontSize: "11px", marginTop: "4px" }}>Pay in cash upon delivery to your doorstep.</p>
+                </div>
+
+                {/* Online Payment */}
+                <div
+                  onClick={() => setPaymentMethod("BANK")}
+                  className="p-4 rounded-lg cursor-pointer transition-all duration-200"
+                  style={{ 
+                    background: paymentMethod !== "COD" ? "rgba(232, 25, 44, 0.05)" : "#141414", 
+                    border: paymentMethod !== "COD" ? "2px solid #e8192c" : "1px solid #2a2a2a" 
+                  }}
+                >
+                  <div className="flex items-center justify-between">
+                    <p style={{ fontFamily: "Rajdhani, sans-serif", color: paymentMethod !== "COD" ? "#e8192c" : "#ddd", fontWeight: 600, fontSize: "15px", letterSpacing: "1px" }}>
+                      ONLINE PAYMENT
+                    </p>
+                    <div className="w-4 h-4 rounded-full border flex items-center justify-center" style={{ borderColor: paymentMethod !== "COD" ? "#e8192c" : "#555" }}>
+                      {paymentMethod !== "COD" && <div className="w-2 h-2 rounded-full" style={{ background: "#e8192c" }} />}
+                    </div>
+                  </div>
+                  <p style={{ fontFamily: "Inter, sans-serif", color: "#666", fontSize: "11px", marginTop: "4px" }}>Pay via Easypaisa, JazzCash, or Bank Transfer.</p>
+                </div>
+              </div>
+
+              {/* Online Payment details panel */}
+              {paymentMethod !== "COD" && (
+                <div className="p-4 rounded-lg flex flex-col gap-3 transition-all duration-300" style={{ background: "#161616", border: "1px solid #2a2a2a" }}>
+                  <p style={{ fontFamily: "Rajdhani, sans-serif", color: "#fff", fontWeight: 700, fontSize: "12px", letterSpacing: "1.5px" }}>ACCOUNTS INFO</p>
+                  
+                  {/* Easypaisa */}
+                  <div className="pb-2.5" style={{ borderBottom: "1px solid #222" }}>
+                    <span style={{ fontFamily: "Rajdhani, sans-serif", color: "#e8192c", fontWeight: 600, fontSize: "12px" }}>EASYPAISA / JAZZCASH</span>
+                    <div className="flex justify-between mt-1 text-xs" style={{ fontFamily: "Inter, sans-serif", color: "#999" }}>
+                      <span>Number:</span>
+                      <span className="font-mono text-white select-all">0300-1234567</span>
+                    </div>
+                    <div className="flex justify-between mt-0.5 text-xs" style={{ fontFamily: "Inter, sans-serif", color: "#999" }}>
+                      <span>Title:</span>
+                      <span className="text-white">Hassan Nawaz</span>
+                    </div>
+                  </div>
+
+                  {/* Bank Transfer */}
+                  <div className="pb-1">
+                    <span style={{ fontFamily: "Rajdhani, sans-serif", color: "#e8192c", fontWeight: 600, fontSize: "12px" }}>BANK TRANSFER</span>
+                    <div className="flex justify-between mt-1 text-xs" style={{ fontFamily: "Inter, sans-serif", color: "#999" }}>
+                      <span>Bank:</span>
+                      <span className="text-white">Meezan Bank</span>
+                    </div>
+                    <div className="flex justify-between mt-0.5 text-xs" style={{ fontFamily: "Inter, sans-serif", color: "#999" }}>
+                      <span>Account Number:</span>
+                      <span className="font-mono text-white select-all">0201-0101-2345-67</span>
+                    </div>
+                    <div className="flex justify-between mt-0.5 text-xs" style={{ fontFamily: "Inter, sans-serif", color: "#999" }}>
+                      <span>Title:</span>
+                      <span className="text-white">Hassan Nawaz</span>
+                    </div>
+                  </div>
+
+                  {/* WhatsApp proof reminder */}
+                  <div className="p-3 rounded bg-red-950/20 border border-red-900/30 text-center mt-1">
+                    <p style={{ fontFamily: "Inter, sans-serif", color: "#eee", fontSize: "10.5px", lineHeight: 1.5 }}>
+                      Please take a screenshot/receipt of the transfer and share it with us on WhatsApp to process your order.
+                    </p>
+                  </div>
+                </div>
+              )}
 
               {/* Order summary */}
-              <div className="mt-4 p-4 rounded-lg" style={{ background: "#141414", border: "1px solid #1e1e1e" }}>
+              <div className="mt-2 p-4 rounded-lg" style={{ background: "#141414", border: "1px solid #1e1e1e" }}>
                 <p style={{ fontFamily: "Rajdhani, sans-serif", color: "#aaa", fontWeight: 600, fontSize: "12px", letterSpacing: "2px", marginBottom: "12px" }}>ORDER SUMMARY</p>
                 {items.map(item => (
                   <div key={item.id} className="flex justify-between mb-2">
@@ -341,16 +406,19 @@ export function Cart({ whatsapp = "923001234567" }: CartProps) {
               </div>
               <h3 style={{ fontFamily: "Rajdhani, sans-serif", color: "#fff", fontWeight: 700, fontSize: "24px", letterSpacing: "2px" }}>ORDER PLACED!</h3>
               <p style={{ fontFamily: "Inter, sans-serif", color: "#888", fontSize: "14px", lineHeight: 1.7 }}>
-                Thank you! Hassan will confirm your order via WhatsApp shortly at the number you provided.
+                {paymentMethod === "COD" 
+                  ? "Thank you! Your Cash on Delivery order has been successfully placed. Hassan will confirm your order via WhatsApp shortly at the number you provided."
+                  : "Thank you! Your order has been placed. Please click the button below to send your payment proof/screenshot to our team via WhatsApp to finalize your order."
+                }
               </p>
               <a
                 href={`https://wa.me/${whatsapp}?text=${whatsappTrackText}`}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 px-6 py-3 rounded"
-                style={{ background: "#25D366", color: "#fff", fontFamily: "Rajdhani, sans-serif", fontWeight: 700, fontSize: "13px", letterSpacing: "2px", textDecoration: "none" }}
+                className="flex items-center gap-2 px-6 py-3 rounded text-center justify-center"
+                style={{ background: "#25D366", color: "#fff", fontFamily: "Rajdhani, sans-serif", fontWeight: 700, fontSize: "13px", letterSpacing: "2px", textDecoration: "none", width: "100%" }}
               >
-                TRACK ON WHATSAPP
+                {paymentMethod === "COD" ? "TRACK ON WHATSAPP" : "SEND PAYMENT PROOF VIA WHATSAPP"}
               </a>
               <button onClick={handleClose} style={{ fontFamily: "Inter, sans-serif", color: "#555", fontSize: "13px", background: "none", border: "none", cursor: "pointer" }}>
                 Continue Shopping
