@@ -16,7 +16,7 @@ export async function generateMetadata() {
     })
     return {
       title: siteContent.heroTitleLine1
-        ? `${siteContent.heroTitleLine1} | HakaiMotives`
+        ? `HakaiMotives | ${siteContent.heroTitleLine1}`
         : 'HakaiMotives | Premium Auto Parts & Modification Store',
       description: siteContent.heroSubcopy || 'Browse, customize, and order premium visual auto upgrades in Pakistan.',
       icons: {
