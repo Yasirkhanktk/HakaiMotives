@@ -447,7 +447,7 @@ export function Cart({ whatsapp = "923490090074" }: CartProps) {
         </div>
 
         {/* Footer */}
-        {step !== "confirmed" && items.length > 0 && (
+        {step !== "confirmed" && step !== "payment" && items.length > 0 && (
           <div className="p-5" style={{ borderTop: "1px solid #1e1e1e" }}>
             {step === "cart" && (
               <div className="flex justify-between mb-4">
