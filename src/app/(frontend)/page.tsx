@@ -29,6 +29,7 @@ export default async function HomePage() {
       const catsRes = await payload.find({
         collection: 'categories',
         limit: 100,
+        depth: 1, // Populate image relationship so we get media.url
       })
       categories = catsRes.docs
     } catch (e) {

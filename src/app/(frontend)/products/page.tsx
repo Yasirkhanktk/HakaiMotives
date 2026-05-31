@@ -40,6 +40,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
       const catsRes = await payload.find({
         collection: 'categories',
         limit: 100,
+        depth: 1, // Populate image relationship
       })
       categories = catsRes.docs
     } catch (e) {
