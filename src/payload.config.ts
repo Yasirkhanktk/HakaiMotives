@@ -4,6 +4,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { resendAdapter } from '@payloadcms/email-resend'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -27,6 +28,26 @@ export default buildConfig({
     url: process.env.DATABASE_URI || 'mongodb://127.0.0.1:27017/hakai-motives',
   }),
   editor: lexicalEditor(),
+  email: process.env.RESEND_API_KEY
+    ? resendAdapter({
+        defaultFromAddress: 'onboarding@resend.dev',
+        defaultFromName: 'Hakai Motives',
+        apiKey: process.env.RESEND_API_KEY,
+      })
+    : undefined,
+  admin: {
+    components: {
+      graphics: {
+        Logo: '@/app/components/AdminLogo#AdminLogo',
+        Icon: '@/app/components/AdminIcon#AdminIcon',
+      },
+    },
+    meta: {
+      titleSuffix: '- Hakai Motives',
+      favicon: '/favicon.ico',
+      ogImage: '/og-image.jpg',
+    },
+  },
   collections: [
     Users,
     Media,

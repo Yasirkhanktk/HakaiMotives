@@ -129,7 +129,7 @@ export default async function HomePage() {
           const catId = typeof p.category === 'object' && p.category !== null ? p.category.id : p.category;
           return catId === cat.id;
         }).length;
-        return { ...cat, count };
+        console.log("CAT:", cat.name, typeof cat.image === "object" ? cat.image?.url : cat.image); return { ...cat, count };
       })
     } catch (err) {
       console.error('Failed to compute category counts:', err)

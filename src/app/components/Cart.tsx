@@ -170,9 +170,14 @@ export function Cart({ whatsapp = "923001234567" }: CartProps) {
               {step === "cart" ? "YOUR CART" : step === "address" ? "DELIVERY INFO" : step === "payment" ? "PAYMENT" : "ORDER PLACED!"}
             </span>
             {itemCount > 0 && step === "cart" && (
-              <span className="px-2 py-0.5 rounded-full" style={{ background: "#e8192c", color: "#fff", fontFamily: "Inter, sans-serif", fontSize: "10px", fontWeight: 700 }}>
-                {itemCount}
-              </span>
+              <div className="flex items-center gap-3">
+                <span className="px-2 py-0.5 rounded-full" style={{ background: "#e8192c", color: "#fff", fontFamily: "Inter, sans-serif", fontSize: "10px", fontWeight: 700 }}>
+                  {itemCount}
+                </span>
+                <button onClick={clearCart} className="text-[10px] text-neutral-500 hover:text-red-500 transition-colors underline font-bold uppercase tracking-wider" style={{ background: "none", border: "none", cursor: "pointer" }}>
+                  Clear
+                </button>
+              </div>
             )}
           </div>
           <button onClick={handleClose} className="p-1.5 rounded transition-colors" style={{ color: "#666", background: "none", border: "none", cursor: "pointer" }} onMouseEnter={e => (e.currentTarget.style.color = "#e8192c")} onMouseLeave={e => (e.currentTarget.style.color = "#666")}>
@@ -297,7 +302,10 @@ export function Cart({ whatsapp = "923001234567" }: CartProps) {
               <div className="flex flex-col gap-3">
                 {/* Cash on Delivery */}
                 <div
-                  onClick={() => setPaymentMethod("COD")}
+                  onClick={() => {
+                    setPaymentMethod("COD");
+                    handlePlaceOrder();
+                  }}
                   className="p-4 rounded-lg cursor-pointer transition-all duration-200"
                   style={{ 
                     background: paymentMethod === "COD" ? "rgba(232, 25, 44, 0.05)" : "#141414", 
@@ -372,11 +380,22 @@ export function Cart({ whatsapp = "923001234567" }: CartProps) {
                   </div>
 
                   {/* WhatsApp proof reminder */}
-                  <div className="p-3 rounded bg-red-950/20 border border-red-900/30 text-center mt-1">
+                  <div className="p-3 rounded bg-red-950/20 border border-red-900/30 text-center mt-1 mb-2">
                     <p style={{ fontFamily: "Inter, sans-serif", color: "#eee", fontSize: "10.5px", lineHeight: 1.5 }}>
                       Please take a screenshot/receipt of the transfer and share it with us on WhatsApp to process your order.
                     </p>
                   </div>
+                  <button
+                    onClick={handlePlaceOrder}
+                    disabled={loading}
+                    className="w-full py-3 rounded flex items-center justify-center gap-2 transition-all duration-200"
+                    style={{ background: "#e8192c", color: "#fff", fontFamily: "Rajdhani, sans-serif", fontWeight: 700, fontSize: "14px", letterSpacing: "2px", border: "none", cursor: "pointer", opacity: loading ? 0.7 : 1 }}
+                    onMouseEnter={e => { if (!loading) e.currentTarget.style.background = "#c0000f"; }}
+                    onMouseLeave={e => { if (!loading) e.currentTarget.style.background = "#e8192c"; }}
+                  >
+                    {loading ? "PROCESSING..." : "PLACE ORDER"}
+                    {!loading && <ArrowRight size={16} />}
+                  </button>
                 </div>
               )}
 
@@ -440,7 +459,6 @@ export function Cart({ whatsapp = "923001234567" }: CartProps) {
               onClick={() => {
                 if (step === "cart") setStep("address");
                 else if (step === "address") setStep("payment");
-                else if (step === "payment") handlePlaceOrder();
               }}
               disabled={loading}
               className="w-full py-3.5 rounded flex items-center justify-center gap-2 transition-all duration-200"
@@ -452,7 +470,7 @@ export function Cart({ whatsapp = "923001234567" }: CartProps) {
                 "PROCESSING..."
               ) : (
                 <>
-                  {step === "cart" ? "PROCEED TO CHECKOUT" : step === "address" ? "CONTINUE TO PAYMENT" : "PLACE ORDER"}
+                  {step === "cart" ? "PROCEED TO CHECKOUT" : "CONTINUE TO PAYMENT"}
                   <ArrowRight size={16} />
                 </>
               )}

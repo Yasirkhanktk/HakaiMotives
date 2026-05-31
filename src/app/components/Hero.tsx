@@ -114,9 +114,10 @@ export function Hero({
           backgroundSize: "clamp(600px, 52vw, 850px)",
           backgroundPosition: "center 55%",
           backgroundRepeat: "no-repeat",
-          opacity: loaded ? 0.18 : 0,
-          transition: "opacity 2s ease",
-          transform: `translateY(${scrollY * 0.12}px)`,
+          opacity: loaded ? 0.28 : 0,
+          transform: loaded ? "scale(1)" : "scale(0.95)",
+          transition: "all 1.5s cubic-bezier(0.16, 1, 0.3, 1)",
+          zIndex: 1,
         }}
       />
 

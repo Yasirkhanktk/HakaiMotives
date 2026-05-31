@@ -314,8 +314,8 @@ export function ProjectGallery({ projects, whatsapp = "923001234567" }: ProjectG
       {/* Lightbox Modal */}
       {activeProject && mounted && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
-          style={{ background: "rgba(0,0,0,0.85)", backdropFilter: "blur(8px)" }}
+          className="fixed inset-0 flex items-center justify-center p-4 sm:p-6"
+          style={{ background: "rgba(0,0,0,0.85)", backdropFilter: "blur(8px)", zIndex: 100 }}
           onClick={() => setActiveProject(null)}
         >
           {/* Modal Container */}

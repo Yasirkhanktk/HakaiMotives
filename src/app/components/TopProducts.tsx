@@ -109,6 +109,7 @@ export function TopProducts({ onAddToCart, featuredProduct, topProducts, whatsap
           <div
             className="relative rounded-xl overflow-hidden group cursor-pointer"
             style={{ background: "#111", border: "1px solid #1e1e1e", minHeight: "400px" }}
+            onClick={() => onAddToCart(activeFeatured)}
           >
             <ImageWithFallback
               src={featuredImg}
