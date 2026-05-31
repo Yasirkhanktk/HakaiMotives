@@ -44,8 +44,6 @@ export default buildConfig({
     },
     meta: {
       titleSuffix: '- Hakai Motives',
-      favicon: '/favicon.ico',
-      ogImage: '/og-image.jpg',
     },
   },
   collections: [
