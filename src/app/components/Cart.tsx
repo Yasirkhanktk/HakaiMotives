@@ -302,10 +302,7 @@ export function Cart({ whatsapp = "923490090074" }: CartProps) {
               <div className="flex flex-col gap-3">
                 {/* Cash on Delivery */}
                 <div
-                  onClick={() => {
-                    setPaymentMethod("COD");
-                    handlePlaceOrder();
-                  }}
+                  onClick={() => setPaymentMethod("COD")}
                   className="p-4 rounded-lg cursor-pointer transition-all duration-200"
                   style={{ 
                     background: paymentMethod === "COD" ? "rgba(232, 25, 44, 0.05)" : "#141414", 
@@ -380,27 +377,29 @@ export function Cart({ whatsapp = "923490090074" }: CartProps) {
                   </div>
 
                   {/* WhatsApp proof reminder */}
-                  <div className="p-3 rounded bg-red-950/20 border border-red-900/30 text-center mt-1 mb-2">
+                  <div className="p-3 rounded bg-red-950/20 border border-red-900/30 text-center mt-1">
                     <p style={{ fontFamily: "Inter, sans-serif", color: "#eee", fontSize: "10.5px", lineHeight: 1.5 }}>
                       Please take a screenshot/receipt of the transfer and share it with us on WhatsApp to process your order.
                     </p>
                   </div>
-                  <button
-                    onClick={handlePlaceOrder}
-                    disabled={loading}
-                    className="w-full py-3 rounded flex items-center justify-center gap-2 transition-all duration-200"
-                    style={{ background: "#e8192c", color: "#fff", fontFamily: "Rajdhani, sans-serif", fontWeight: 700, fontSize: "14px", letterSpacing: "2px", border: "none", cursor: "pointer", opacity: loading ? 0.7 : 1 }}
-                    onMouseEnter={e => { if (!loading) e.currentTarget.style.background = "#c0000f"; }}
-                    onMouseLeave={e => { if (!loading) e.currentTarget.style.background = "#e8192c"; }}
-                  >
-                    {loading ? "PROCESSING..." : "PLACE ORDER"}
-                    {!loading && <ArrowRight size={16} />}
-                  </button>
                 </div>
               )}
 
+              {/* Shared PLACE ORDER button for both payment methods */}
+              <button
+                onClick={handlePlaceOrder}
+                disabled={loading}
+                className="w-full py-3.5 rounded flex items-center justify-center gap-2 transition-all duration-200"
+                style={{ background: "#e8192c", color: "#fff", fontFamily: "Rajdhani, sans-serif", fontWeight: 700, fontSize: "14px", letterSpacing: "2px", border: "none", cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.7 : 1 }}
+                onMouseEnter={e => { if (!loading) e.currentTarget.style.background = "#c0000f"; }}
+                onMouseLeave={e => { if (!loading) e.currentTarget.style.background = "#e8192c"; }}
+              >
+                {loading ? "PROCESSING..." : "PLACE ORDER"}
+                {!loading && <ArrowRight size={16} />}
+              </button>
+
               {/* Order summary */}
-              <div className="mt-2 p-4 rounded-lg" style={{ background: "#141414", border: "1px solid #1e1e1e" }}>
+              <div className="p-4 rounded-lg" style={{ background: "#141414", border: "1px solid #1e1e1e" }}>
                 <p style={{ fontFamily: "Rajdhani, sans-serif", color: "#aaa", fontWeight: 600, fontSize: "12px", letterSpacing: "2px", marginBottom: "12px" }}>ORDER SUMMARY</p>
                 {items.map(item => (
                   <div key={item.id} className="flex justify-between mb-2">
