@@ -44,47 +44,69 @@ export const Orders: CollectionConfig = {
 
           // Send confirmation email
           try {
+            // Determine absolute site URL dynamically for email client images
+            const host = req.headers?.get('host') || 'hakaimotives.com';
+            const protocol = host.includes('localhost') ? 'http' : 'https';
+            const siteUrl = `${protocol}://${host}`;
+
             const itemsHtml: string = items.map((item: { name: string; quantity: number; price: number; product: unknown }) =>
-              `<li style="margin-bottom: 10px; display: flex; justify-content: space-between; border-bottom: 1px dashed #eee; padding-bottom: 5px;">
-                <span>${item.name} (Qty: ${item.quantity})</span>
-                <strong>PKR ${(item.price * item.quantity).toLocaleString()}</strong>
-              </li>`
+              `<tr style="border-bottom: 1px solid #f4f4f4;">
+                <td style="padding: 12px 0; font-size: 14px; font-weight: bold; color: #333; text-align: left;">${item.name}</td>
+                <td style="padding: 12px 0; font-size: 14px; color: #666; text-align: center;">${item.quantity}</td>
+                <td style="padding: 12px 0; font-size: 14px; color: #666; text-align: right;">PKR ${item.price.toLocaleString()}</td>
+                <td style="padding: 12px 0; font-size: 14px; font-weight: bold; color: #e8192c; text-align: right;">PKR ${(item.price * item.quantity).toLocaleString()}</td>
+              </tr>`
             ).join('');
 
             const htmlMessage = `
               <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e1e1e1; border-radius: 8px;">
-                <div style="text-align: center; padding: 20px 0 10px 0; border-bottom: 2px solid #e8192c; margin-bottom: 20px;">
-                  <div style="display: inline-flex; align-items: center; gap: 12px;">
-                    <svg width="48" height="48" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 0 6px rgba(232,25,44,0.5));">
-                      <path d="M1.5 76.5L34.5 23.5H55.5L41 46.5L75 23.5H95.5L76.5 54L81.5 76.5H58.5L71.5 56.5L43 76.5H20.5L1.5 76.5Z" fill="#e8192c"/>
-                    </svg>
-                    <div>
-                      <span style="font-family: Arial, sans-serif; color: #e8192c; font-weight: 700; font-size: 26px; letter-spacing: 4px;">HAKAI</span><span style="font-family: Arial, sans-serif; color: #111; font-weight: 600; font-size: 26px; letter-spacing: 4px;"> MOTIVES</span>
-                    </div>
+                <div style="text-align: center; padding: 15px 0; border-bottom: 2px solid #e8192c; margin-bottom: 20px;">
+                  <img src="${siteUrl}/api/media/file/logo.png" alt="Hakai Motives Logo" width="80" height="80" style="display: block; margin: 0 auto 10px auto; border-radius: 8px;" />
+                  <div style="font-family: Arial, sans-serif; color: #e8192c; font-weight: 700; font-size: 26px; letter-spacing: 4px; text-transform: uppercase; display: inline-flex; align-items: center; gap: 8px; justify-content: center;">
+                    HAKAI <span style="color: #111111; font-weight: 600;">MOTIVES</span>
                   </div>
                 </div>
-                <h2 style="text-align: center; padding-bottom: 10px;">Order Confirmation</h2>
+                
+                <h2 style="text-align: center; padding-bottom: 5px; margin-top: 0; color: #111;">Order Confirmation</h2>
                 <p>Hi <strong>${doc.customerName}</strong>,</p>
                 <p>Thank you for placing an order with Hakai Motives! We have received your order and are currently processing it.</p>
 
-                <h3 style="margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px;">Order Details</h3>
-                <ul style="list-style-type: none; padding: 0;">
-                  ${itemsHtml}
-                </ul>
+                <h3 style="margin-top: 30px; border-bottom: 2px solid #eee; padding-bottom: 8px; color: #111; font-size: 16px;">Order Details</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                  <thead>
+                    <tr style="border-bottom: 2px solid #eee; text-align: left;">
+                      <th style="padding: 10px 0; font-size: 13px; color: #666; text-align: left;">Item</th>
+                      <th style="padding: 10px 0; font-size: 13px; color: #666; text-align: center; width: 60px;">Qty</th>
+                      <th style="padding: 10px 0; font-size: 13px; color: #666; text-align: right; width: 100px;">Price</th>
+                      <th style="padding: 10px 0; font-size: 13px; color: #666; text-align: right; width: 110px;">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${itemsHtml}
+                  </tbody>
+                </table>
 
-                <div style="margin-top: 20px; font-size: 18px; text-align: right;">
-                  <strong>Total: <span style="color: #e8192c;">PKR ${doc.total.toLocaleString()}</span></strong>
+                <div style="margin-top: 20px; font-size: 18px; text-align: right; border-top: 1px solid #eee; padding-top: 15px;">
+                  <strong>Grand Total: <span style="color: #e8192c;">PKR ${doc.total.toLocaleString()}</span></strong>
                 </div>
 
-                <div style="margin-top: 30px; background: #f9f9f9; padding: 15px; border-left: 4px solid #e8192c;">
-                  <h4 style="margin: 0 0 10px 0;">Delivery Information</h4>
-                  <p style="margin: 0;"><strong>Address:</strong> ${doc.customerAddress}, ${doc.customerCity}</p>
-                  <p style="margin: 5px 0 0 0;"><strong>Phone:</strong> ${doc.customerPhone}</p>
-                  <p style="margin: 5px 0 0 0;"><strong>Payment Method:</strong> ${doc.paymentMethod === 'COD' ? 'Cash on Delivery' : 'Online Payment'}</p>
+                <div style="margin-top: 30px; background: #f9f9f9; padding: 15px; border-left: 4px solid #e8192c; border-radius: 0 4px 4px 0;">
+                  <h4 style="margin: 0 0 10px 0; color: #111; font-size: 15px;">Delivery Information</h4>
+                  <p style="margin: 0; font-size: 14px;"><strong>Address:</strong> ${doc.customerAddress}</p>
+                  <p style="margin: 5px 0 0 0; font-size: 14px;"><strong>Phone:</strong> ${doc.customerPhone}</p>
+                  <p style="margin: 5px 0 0 0; font-size: 14px;"><strong>Payment Method:</strong> ${doc.paymentMethod === 'COD' ? 'Cash on Delivery' : 'Online Payment'}</p>
                 </div>
 
-                <p style="margin-top: 30px; text-align: center; font-size: 14px; color: #777;">
-                  If you have any questions, please contact us on WhatsApp.
+                <div style="margin-top: 35px; border-top: 1px solid #eee; padding-top: 20px; font-size: 13px; color: #666;">
+                  <h4 style="margin: 0 0 10px 0; color: #111; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Contact Details</h4>
+                  <p style="margin: 5px 0;"><strong>WhatsApp:</strong> <a href="https://wa.me/923490090074" style="color: #25D366; text-decoration: none; font-weight: bold;">+92 349 0090074</a></p>
+                  <p style="margin: 5px 0;"><strong>Instagram:</strong> <a href="https://www.instagram.com" style="color: #e8192c; text-decoration: none;">@HakaiMotives</a></p>
+                  <p style="margin: 5px 0;"><strong>Email:</strong> <a href="mailto:info@hakaimotives.com" style="color: #e8192c; text-decoration: none;">info@hakaimotives.com</a></p>
+                  <p style="margin: 5px 0;"><strong>Location:</strong> Pakistan — Nationwide Delivery</p>
+                </div>
+
+                <p style="margin-top: 30px; text-align: center; font-size: 12px; color: #999; border-top: 1px dashed #eee; padding-top: 15px; margin-bottom: 0;">
+                  Thank you for shopping with Hakai Motives!
                 </p>
               </div>
             `;
