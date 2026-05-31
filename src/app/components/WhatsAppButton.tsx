@@ -1,7 +1,13 @@
+'use client'
+
 import { useState } from "react";
 import { X, MessageCircle } from "lucide-react";
 
-export function WhatsAppButton() {
+interface WhatsAppButtonProps {
+  whatsapp?: string;
+}
+
+export function WhatsAppButton({ whatsapp = "923001234567" }: WhatsAppButtonProps) {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -9,7 +15,7 @@ export function WhatsAppButton() {
       {/* Expanded bubble */}
       {expanded && (
         <div
-          className="rounded-xl p-4 mb-1 shadow-2xl"
+          className="rounded-xl p-4 mb-1 shadow-2xl animate-fade-in"
           style={{ background: "#1a1a1a", border: "1px solid #2a2a2a", width: "260px" }}
         >
           <div className="flex items-center gap-3 mb-3">
@@ -32,7 +38,7 @@ export function WhatsAppButton() {
             </p>
           </div>
           <a
-            href="https://wa.me/923001234567?text=Hi%20Hassan!%20I%20found%20your%20website%20and%20I'm%20interested%20in%20your%20car%20modification%20parts."
+            href={`https://wa.me/${whatsapp}?text=Hi%20Hakai%20Motives!%20I'm%20interested%20in%20inquiring%20about%20car%20modification%20parts.`}
             target="_blank"
             rel="noreferrer"
             className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg transition-all duration-200"
@@ -50,7 +56,7 @@ export function WhatsAppButton() {
       <button
         onClick={() => setExpanded(!expanded)}
         className="w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all duration-300"
-        style={{ background: "#25D366", transform: expanded ? "scale(0.95)" : "scale(1)" }}
+        style={{ background: "#25D366", transform: expanded ? "scale(0.95)" : "scale(1)", border: "none", cursor: "pointer" }}
         onMouseEnter={e => (e.currentTarget.style.background = "#1eba57")}
         onMouseLeave={e => (e.currentTarget.style.background = "#25D366")}
       >

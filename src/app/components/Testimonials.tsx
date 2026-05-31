@@ -1,8 +1,10 @@
-import { useState } from "react";
+'use client'
+
+import { useState, useEffect } from "react";
 import { Star, CheckCircle, MessageSquare, PlusCircle } from "lucide-react";
 
 interface Testimonial {
-  id: number;
+  id: string;
   name: string;
   carModel: string;
   location: string;
@@ -12,9 +14,9 @@ interface Testimonial {
   partBought: string;
 }
 
-const initialTestimonials: Testimonial[] = [
+const STATIC_TESTIMONIALS: Testimonial[] = [
   {
-    id: 1,
+    id: "1",
     name: "Zain Ahmed",
     carModel: "Honda Civic X (2019)",
     location: "Lahore",
@@ -24,7 +26,7 @@ const initialTestimonials: Testimonial[] = [
     partBought: "RGB Ambient Lighting Kit",
   },
   {
-    id: 2,
+    id: "2",
     name: "M. Bilal",
     carModel: "Toyota Corolla (2021)",
     location: "Karachi",
@@ -34,7 +36,7 @@ const initialTestimonials: Testimonial[] = [
     partBought: "Front Bumper Lip",
   },
   {
-    id: 3,
+    id: "3",
     name: "Hamza Malik",
     carModel: "Toyota Yaris (2022)",
     location: "Islamabad",
@@ -42,16 +44,6 @@ const initialTestimonials: Testimonial[] = [
     date: "1 month ago",
     comment: "Great quality spoiler. The carbon fiber weave looks premium under sunlight. Minor adjustment was needed during fitting but overall extremely pleased with the aggressive look.",
     partBought: "Trunk Lip Spoiler",
-  },
-  {
-    id: 4,
-    name: "Faisal Khan",
-    carModel: "Honda BR-V (2020)",
-    location: "Peshawar",
-    rating: 5,
-    date: "2 months ago",
-    comment: "Excellent service. Got the starlight interior roof lights and customized sport rims. Hakai Motives makes high-quality mods accessible in Pakistan. Best store for modifications.",
-    partBought: "Custom Alloy Rims",
   },
 ];
 
@@ -62,8 +54,12 @@ const stats = [
   { value: "100%", label: "FITMENT ASSURANCE" },
 ];
 
-export function Testimonials() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>(initialTestimonials);
+interface TestimonialsProps {
+  testimonials?: any[];
+}
+
+export function Testimonials({ testimonials: databaseReviews }: TestimonialsProps) {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [selectedRating, setSelectedRating] = useState<number | "ALL">("ALL");
   
   // Form State
@@ -75,40 +71,83 @@ export function Testimonials() {
   const [newPart, setNewPart] = useState("");
   const [newComment, setNewComment] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // Sync database reviews on load
+  useEffect(() => {
+    if (databaseReviews && databaseReviews.length > 0) {
+      setTestimonials(databaseReviews.map(r => ({
+        id: r.id || r._id,
+        name: r.name,
+        carModel: r.carModel,
+        location: r.location || "Pakistan",
+        rating: r.rating,
+        date: r.createdAt ? new Date(r.createdAt).toLocaleDateString() : "Recently",
+        comment: r.comment,
+        partBought: r.partBought,
+      })));
+    } else {
+      setTestimonials(STATIC_TESTIMONIALS);
+    }
+  }, [databaseReviews]);
 
   const filteredTestimonials = selectedRating === "ALL"
     ? testimonials
     : testimonials.filter(t => t.rating === selectedRating);
 
-  const handleSubmitReview = (e: React.FormEvent) => {
+  const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newName || !newCarModel || !newComment) return;
 
-    const newReview: Testimonial = {
-      id: Date.now(),
-      name: newName,
-      carModel: newCarModel,
-      location: newLocation || "Pakistan",
-      rating: newRating,
-      date: "Just now",
-      comment: newComment,
-      partBought: newPart || "Modified Part",
-    };
+    setLoading(true);
 
-    setTestimonials([newReview, ...testimonials]);
-    setSubmitted(true);
-    
-    // Reset form states
-    setTimeout(() => {
-      setNewName("");
-      setNewCarModel("");
-      setNewLocation("");
-      setNewRating(5);
-      setNewPart("");
-      setNewComment("");
-      setSubmitted(false);
-      setShowForm(false);
-    }, 1800);
+    try {
+      const response = await fetch("/api/testimonials", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newName,
+          carModel: newCarModel,
+          location: newLocation || "Pakistan",
+          rating: newRating,
+          comment: newComment,
+          partBought: newPart || "Modified Part",
+          verified: true // Auto verify
+        })
+      });
+
+      if (response.ok) {
+        const doc = await response.json();
+        const newReview: Testimonial = {
+          id: doc.id,
+          name: doc.name,
+          carModel: doc.carModel,
+          location: doc.location || "Pakistan",
+          rating: doc.rating,
+          date: "Just now",
+          comment: doc.comment,
+          partBought: doc.partBought,
+        };
+
+        setTestimonials([newReview, ...testimonials]);
+        setSubmitted(true);
+        
+        setTimeout(() => {
+          setNewName("");
+          setNewCarModel("");
+          setNewLocation("");
+          setNewRating(5);
+          setNewPart("");
+          setNewComment("");
+          setSubmitted(false);
+          setShowForm(false);
+        }, 1800);
+      }
+    } catch (err) {
+      console.error("Failed to submit review:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -211,6 +250,7 @@ export function Testimonials() {
                       required
                       type="text"
                       value={newName}
+                      disabled={loading}
                       onChange={e => setNewName(e.target.value)}
                       placeholder="e.g. Zain Ahmed"
                       className="w-full px-4 py-2 rounded text-sm text-white"
@@ -223,6 +263,7 @@ export function Testimonials() {
                       required
                       type="text"
                       value={newCarModel}
+                      disabled={loading}
                       onChange={e => setNewCarModel(e.target.value)}
                       placeholder="e.g. Honda Civic 2021"
                       className="w-full px-4 py-2 rounded text-sm text-white"
@@ -237,6 +278,7 @@ export function Testimonials() {
                     <input
                       type="text"
                       value={newLocation}
+                      disabled={loading}
                       onChange={e => setNewLocation(e.target.value)}
                       placeholder="e.g. Lahore"
                       className="w-full px-4 py-2 rounded text-sm text-white"
@@ -248,6 +290,7 @@ export function Testimonials() {
                     <input
                       type="text"
                       value={newPart}
+                      disabled={loading}
                       onChange={e => setNewPart(e.target.value)}
                       placeholder="e.g. RGB Ambient Lights"
                       className="w-full px-4 py-2 rounded text-sm text-white"
@@ -261,9 +304,10 @@ export function Testimonials() {
                         <button
                           key={num}
                           type="button"
+                          disabled={loading}
                           onClick={() => setNewRating(num)}
                           className="p-1 hover:scale-115 transition-transform"
-                          style={{ cursor: "pointer" }}
+                          style={{ cursor: "pointer", background: "none", border: "none" }}
                         >
                           <Star
                             size={18}
@@ -282,6 +326,7 @@ export function Testimonials() {
                     required
                     rows={4}
                     value={newComment}
+                    disabled={loading}
                     onChange={e => setNewComment(e.target.value)}
                     placeholder="Tell us about the part build quality, fitment, and your overall experience..."
                     className="w-full px-4 py-2 rounded text-sm text-white resize-none"
@@ -291,10 +336,11 @@ export function Testimonials() {
 
                 <button
                   type="submit"
-                  className="px-6 py-3 rounded font-bold text-xs tracking-wider transition-colors"
-                  style={{ background: "#e8192c", color: "#fff", cursor: "pointer", fontFamily: "Space Grotesk, sans-serif" }}
+                  disabled={loading}
+                  className="px-6 py-3 rounded font-bold text-xs tracking-wider transition-colors disabled:opacity-50"
+                  style={{ background: "#e8192c", color: "#fff", cursor: "pointer", fontFamily: "Space Grotesk, sans-serif", border: "none" }}
                 >
-                  SUBMIT REVIEW
+                  {loading ? "SUBMITTING..." : "SUBMIT REVIEW"}
                 </button>
               </form>
             )}
@@ -339,7 +385,6 @@ export function Testimonials() {
                 {/* User metadata */}
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    {/* User Circle placeholder */}
                     <div
                       className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs"
                       style={{
@@ -349,7 +394,7 @@ export function Testimonials() {
                         fontFamily: "Space Grotesk, sans-serif",
                       }}
                     >
-                      {testimonial.name.split(" ").map(w => w[0]).join("")}
+                      {testimonial.name ? testimonial.name.split(" ").map(w => w[0]).join("") : "U"}
                     </div>
                     <div>
                       <h4

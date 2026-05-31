@@ -1,59 +1,62 @@
+'use client'
+
 import { useState } from "react";
-import { ShoppingCart, Search, Menu, X, Instagram, ChevronDown } from "lucide-react";
+import { ShoppingCart, Search, Menu, X, Instagram } from "lucide-react";
+import { useCart } from "@/app/context/CartContext";
+import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
 
 interface NavbarProps {
-  cartCount: number;
-  onCartClick: () => void;
-  currentPage: { name: string; category?: string; query?: string };
-  onNavigate: (page: { name: string; category?: string; query?: string }) => void;
+  whatsapp?: string;
+  instagram?: string;
 }
 
-export function Navbar({ cartCount, onCartClick, currentPage, onNavigate }: NavbarProps) {
+export function Navbar({ whatsapp = "923001234567", instagram = "https://www.instagram.com" }: NavbarProps) {
+  const { cartCount, setCartOpen } = useCart();
+  const router = useRouter();
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const navLinks = [
-    { label: "PRODUCTS", targetId: "products" },
-    { label: "GALLERY", targetId: "gallery" },
-    { label: "TESTIMONIALS", targetId: "testimonials" },
-    { label: "CONTACT", targetId: "footer" },
+    { label: "PRODUCTS", targetId: "products", href: "/products" },
+    { label: "GALLERY", targetId: "gallery", href: "/#gallery" },
+    { label: "TESTIMONIALS", targetId: "testimonials", href: "/#testimonials" },
+    { label: "CONTACT", targetId: "footer", href: "/#footer" },
   ];
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
-    e.preventDefault();
-    if (targetId === "products") {
-      onNavigate({ name: "products", category: "all" });
-    } else {
-      if (currentPage.name !== "home") {
-        onNavigate({ name: "home" });
-        setTimeout(() => {
-          const element = document.getElementById(targetId);
-          if (element) {
-            const offset = element.getBoundingClientRect().top + window.scrollY - 64;
-            window.scrollTo({ top: offset, behavior: "smooth" });
-          }
-        }, 100);
-      } else {
-        const element = document.getElementById(targetId);
-        if (element) {
-          const offset = element.getBoundingClientRect().top + window.scrollY - 64;
-          window.scrollTo({ top: offset, behavior: "smooth" });
-        }
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, link: typeof navLinks[0]) => {
+    setMobileOpen(false);
+    if (link.targetId === "products") {
+      // Products page navigation
+      return;
+    }
+
+    // Scroll handlers
+    if (pathname === "/") {
+      e.preventDefault();
+      const element = document.getElementById(link.targetId);
+      if (element) {
+        const offset = element.getBoundingClientRect().top + window.scrollY - 64;
+        window.scrollTo({ top: offset, behavior: "smooth" });
       }
     }
   };
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    onNavigate({ name: "home" });
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      router.push("/");
+    }
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      onNavigate({ name: "products", category: "all", query: searchQuery });
+      router.push(`/products?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchOpen(false);
       setSearchQuery("");
     }
@@ -89,17 +92,17 @@ export function Navbar({ cartCount, onCartClick, currentPage, onNavigate }: Navb
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.label}
-                href={`#${link.targetId}`}
-                onClick={(e) => handleLinkClick(e, link.targetId)}
+                href={link.href}
+                onClick={(e) => handleLinkClick(e, link)}
                 className="flex items-center gap-1 transition-colors duration-200"
                 style={{ fontFamily: "Space Grotesk, sans-serif", color: "#aaa", fontSize: "13px", fontWeight: 600, letterSpacing: "1.5px", textDecoration: "none" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "#e8192c")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#aaa")}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -124,7 +127,7 @@ export function Navbar({ cartCount, onCartClick, currentPage, onNavigate }: Navb
               <button
                 onClick={() => setSearchOpen(true)}
                 className="p-2 rounded transition-colors"
-                style={{ color: "#888" }}
+                style={{ color: "#888", border: "none", background: "none", cursor: "pointer" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "#e8192c")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#888")}
               >
@@ -133,7 +136,7 @@ export function Navbar({ cartCount, onCartClick, currentPage, onNavigate }: Navb
             )}
 
             <a
-              href="https://www.instagram.com"
+              href={instagram}
               target="_blank"
               rel="noreferrer"
               className="p-2 rounded transition-colors hidden sm:flex"
@@ -145,9 +148,9 @@ export function Navbar({ cartCount, onCartClick, currentPage, onNavigate }: Navb
             </a>
 
             <button
-              onClick={onCartClick}
+              onClick={() => setCartOpen(true)}
               className="p-2 rounded relative transition-colors"
-              style={{ color: "#888" }}
+              style={{ color: "#888", border: "none", background: "none", cursor: "pointer" }}
               onMouseEnter={e => (e.currentTarget.style.color = "#e8192c")}
               onMouseLeave={e => (e.currentTarget.style.color = "#888")}
             >
@@ -164,7 +167,7 @@ export function Navbar({ cartCount, onCartClick, currentPage, onNavigate }: Navb
 
             <button
               className="md:hidden p-2"
-              style={{ color: "#888" }}
+              style={{ color: "#888", border: "none", background: "none", cursor: "pointer" }}
               onClick={() => setMobileOpen(!mobileOpen)}
             >
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -176,18 +179,15 @@ export function Navbar({ cartCount, onCartClick, currentPage, onNavigate }: Navb
         {mobileOpen && (
           <div className="md:hidden py-4 border-t" style={{ borderColor: "#1a1a1a" }}>
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.label}
-                href={`#${link.targetId}`}
-                onClick={(e) => {
-                  setMobileOpen(false);
-                  handleLinkClick(e, link.targetId);
-                }}
+                href={link.href}
+                onClick={(e) => handleLinkClick(e, link)}
                 className="block py-3 px-2 transition-colors"
                 style={{ fontFamily: "Space Grotesk, sans-serif", color: "#aaa", fontSize: "14px", fontWeight: 600, letterSpacing: "1.5px", textDecoration: "none" }}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
         )}

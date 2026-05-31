@@ -1,12 +1,16 @@
-import { useState } from "react";
+'use client'
+
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X, ShoppingCart, MessageCircle, Minus, Plus, Star } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { Product } from "../data/products";
+import { Product } from "./ProductCard";
+import { useCart } from "@/app/context/CartContext";
 
 interface ProductModalProps {
   product: Product;
   onClose: () => void;
-  onAddToCart: (product: Product, quantity: number, color: string) => void;
+  whatsapp?: string;
 }
 
 const COLORS = [
@@ -16,21 +20,55 @@ const COLORS = [
   { name: "Redline Edition", value: "#e8192c", border: "#900" }
 ];
 
-export function ProductModal({ product, onClose, onAddToCart }: ProductModalProps) {
+export function ProductModal({ product, onClose, whatsapp = "923001234567" }: ProductModalProps) {
+  const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState(COLORS[0].name);
+  const [mounted, setMounted] = useState(false);
 
-  const handleIncrement = () => setQuantity(q => q + 1);
+  useEffect(() => {
+    setMounted(true);
+    const originalOverflow = window.getComputedStyle(document.body).overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
+  const brandName = typeof product.brand === "object" && product.brand !== null
+    ? product.brand.name
+    : (product.brand || "HAKAI MOTIVES");
+
+  const imageUrl = typeof product.image === "object" && product.image !== null
+    ? product.image.url
+    : (product.image || "");
+
+  // Default inventory fallback to 10 if not defined
+  const inventoryCount = typeof (product as any).inventory !== "undefined"
+    ? (product as any).inventory
+    : 10;
+  
+  const isOutOfStock = inventoryCount <= 0;
+
+  const handleIncrement = () => setQuantity(q => (q < inventoryCount ? q + 1 : q));
   const handleDecrement = () => setQuantity(q => (q > 1 ? q - 1 : 1));
+
+  const handleAddToCartClick = () => {
+    if (isOutOfStock) return;
+    addToCart(product, quantity, selectedColor);
+    onClose();
+  };
 
   const handleWhatsAppInquiry = () => {
     const text = encodeURIComponent(
       `Hi Hakai Motives! I want to inquire about "${product.name}" in "${selectedColor}" color option.\n\nQuantity: ${quantity}\nCompatible: ${product.compatible}\nPrice: PKR ${(product.price * quantity).toLocaleString()}`
     );
-    window.open(`https://wa.me/923001234567?text=${text}`, "_blank");
+    window.open(`https://wa.me/${whatsapp}?text=${text}`, "_blank");
   };
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
       style={{ background: "rgba(0,0,0,0.85)", backdropFilter: "blur(12px)" }}
@@ -64,7 +102,7 @@ export function ProductModal({ product, onClose, onAddToCart }: ProductModalProp
         {/* Left Column: Product Image */}
         <div className="w-full md:w-1/2 bg-black flex items-center justify-center relative overflow-hidden aspect-[4/3] md:aspect-auto">
           <ImageWithFallback
-            src={product.image}
+            src={imageUrl}
             alt={product.name}
             className="w-full h-full object-cover"
             style={{ minHeight: "240px" }}
@@ -79,6 +117,18 @@ export function ProductModal({ product, onClose, onAddToCart }: ProductModalProp
               }}
             >
               {product.badge}
+            </span>
+          )}
+          {isOutOfStock && (
+            <span
+              className="absolute top-4 right-4 px-2 py-0.5 rounded text-[9px] font-bold tracking-wider"
+              style={{
+                background: "#555555",
+                color: "#ffffff",
+                fontFamily: "Space Grotesk, sans-serif",
+              }}
+            >
+              OUT OF STOCK
             </span>
           )}
         </div>
@@ -97,7 +147,7 @@ export function ProductModal({ product, onClose, onAddToCart }: ProductModalProp
                 textTransform: "uppercase",
               }}
             >
-              {product.brand}
+              {brandName}
             </span>
 
             {/* Product Name */}
@@ -134,13 +184,13 @@ export function ProductModal({ product, onClose, onAddToCart }: ProductModalProp
                   <Star
                     key={s}
                     size={12}
-                    fill={s <= Math.floor(product.rating) ? "#e8192c" : "none"}
-                    color={s <= Math.floor(product.rating) ? "#e8192c" : "#444"}
+                    fill={s <= Math.floor(product.rating || 5) ? "#e8192c" : "none"}
+                    color={s <= Math.floor(product.rating || 5) ? "#e8192c" : "#444"}
                   />
                 ))}
               </div>
               <span style={{ fontFamily: "Outfit, sans-serif", color: "#555", fontSize: "11px" }}>
-                {product.rating} ({product.reviews} reviews)
+                {product.rating || 5} ({product.reviews || 0} reviews)
               </span>
             </div>
 
@@ -160,7 +210,7 @@ export function ProductModal({ product, onClose, onAddToCart }: ProductModalProp
                 >
                   PKR {(product.price * quantity).toLocaleString()}
                 </span>
-                {product.originalPrice > product.price && (
+                {product.originalPrice && product.originalPrice > product.price && (
                   <span
                     style={{
                       fontFamily: "Outfit, sans-serif",
@@ -208,15 +258,16 @@ export function ProductModal({ product, onClose, onAddToCart }: ProductModalProp
             {/* Quantity Selector */}
             <div className="mb-8">
               <div className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider mb-2.5" style={{ fontFamily: "Space Grotesk, sans-serif" }}>
-                Quantity
+                Quantity {inventoryCount < 10 && !isOutOfStock && <span className="text-red-500 font-medium normal-case">(Only {inventoryCount} left!)</span>}
               </div>
               <div
                 className="inline-flex items-center rounded"
                 style={{ border: "1px solid #222", background: "#111" }}
               >
                 <button
+                  disabled={isOutOfStock}
                   onClick={handleDecrement}
-                  className="px-3 py-2 text-neutral-400 hover:text-white transition-colors"
+                  className="px-3 py-2 text-neutral-400 hover:text-white transition-colors disabled:opacity-30"
                   style={{ background: "none", border: "none", cursor: "pointer" }}
                 >
                   <Minus size={14} />
@@ -225,11 +276,12 @@ export function ProductModal({ product, onClose, onAddToCart }: ProductModalProp
                   className="px-4 text-sm font-bold text-white min-w-[32px] text-center"
                   style={{ fontFamily: "Space Grotesk, sans-serif" }}
                 >
-                  {quantity}
+                  {isOutOfStock ? 0 : quantity}
                 </span>
                 <button
+                  disabled={isOutOfStock}
                   onClick={handleIncrement}
-                  className="px-3 py-2 text-neutral-400 hover:text-white transition-colors"
+                  className="px-3 py-2 text-neutral-400 hover:text-white transition-colors disabled:opacity-30"
                   style={{ background: "none", border: "none", cursor: "pointer" }}
                 >
                   <Plus size={14} />
@@ -241,19 +293,21 @@ export function ProductModal({ product, onClose, onAddToCart }: ProductModalProp
           {/* Action Buttons */}
           <div className="flex flex-col gap-3">
             <button
-              onClick={() => onAddToCart(product, quantity, selectedColor)}
-              className="w-full flex items-center justify-center gap-2 py-3.5 rounded font-bold tracking-wide transition-colors"
+              disabled={isOutOfStock}
+              onClick={handleAddToCartClick}
+              className="w-full flex items-center justify-center gap-2 py-3.5 rounded font-bold tracking-wide transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
-                background: "#e8192c",
-                color: "#ffffff",
+                background: isOutOfStock ? "#333333" : "#e8192c",
+                color: isOutOfStock ? "#666666" : "#ffffff",
                 fontFamily: "Space Grotesk, sans-serif",
                 fontSize: "13px",
-                cursor: "pointer",
+                cursor: isOutOfStock ? "not-allowed" : "pointer",
+                border: "none",
               }}
-              onMouseEnter={e => (e.currentTarget.style.background = "#c0000f")}
-              onMouseLeave={e => (e.currentTarget.style.background = "#e8192c")}
+              onMouseEnter={e => { if (!isOutOfStock) e.currentTarget.style.background = "#c0000f"; }}
+              onMouseLeave={e => { if (!isOutOfStock) e.currentTarget.style.background = "#e8192c"; }}
             >
-              <ShoppingCart size={15} /> ADD TO CART
+              <ShoppingCart size={15} /> {isOutOfStock ? "OUT OF STOCK" : "ADD TO CART"}
             </button>
             <button
               onClick={handleWhatsAppInquiry}
@@ -282,6 +336,7 @@ export function ProductModal({ product, onClose, onAddToCart }: ProductModalProp
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

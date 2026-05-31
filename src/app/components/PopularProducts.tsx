@@ -4,7 +4,7 @@ import { ProductCard, Product } from "./ProductCard";
 
 const popularProducts: Product[] = [
   {
-    id: 1,
+    id: "1",
     name: "Front Bumper Lip",
     brand: "HAKAI MOTIVES",
     compatible: "Toyota Corolla 2014-2021",
@@ -17,7 +17,7 @@ const popularProducts: Product[] = [
     category: "bumpers",
   },
   {
-    id: 2,
+    id: "2",
     name: "Rear Bumper Diffuser",
     brand: "HAKAI MOTIVES",
     compatible: "Honda Civic 2016-2021",
@@ -30,7 +30,7 @@ const popularProducts: Product[] = [
     category: "bumpers",
   },
   {
-    id: 3,
+    id: "3",
     name: "Carbon Side Mirror Covers",
     brand: "HAKAI MOTIVES",
     compatible: "Toyota Corolla / Honda Civic",
@@ -43,7 +43,7 @@ const popularProducts: Product[] = [
     category: "mirrors",
   },
   {
-    id: 4,
+    id: "4",
     name: "RGB Ambient Lighting Kit",
     brand: "HAKAI MOTIVES",
     compatible: "Universal Fit",
@@ -56,7 +56,7 @@ const popularProducts: Product[] = [
     category: "lighting",
   },
   {
-    id: 5,
+    id: "5",
     name: "Trunk Lip Spoiler",
     brand: "HAKAI MOTIVES",
     compatible: "Toyota Corolla 2017+",
@@ -69,7 +69,7 @@ const popularProducts: Product[] = [
     category: "spoilers",
   },
   {
-    id: 6,
+    id: "6",
     name: "Sport Racing Rims (Set of 4)",
     brand: "HAKAI MOTIVES",
     compatible: "Toyota Corolla / Honda Civic",
@@ -81,7 +81,7 @@ const popularProducts: Product[] = [
     category: "wheels",
   },
   {
-    id: 7,
+    id: "7",
     name: "Carbon Fiber Steering Wheel",
     brand: "HAKAI MOTIVES",
     compatible: "Universal Fit (with adapter)",
@@ -94,7 +94,7 @@ const popularProducts: Product[] = [
     category: "interior",
   },
   {
-    id: 8,
+    id: "8",
     name: "Full Body Kit",
     brand: "HAKAI MOTIVES",
     compatible: "Honda Civic 2022+",
@@ -109,7 +109,7 @@ const popularProducts: Product[] = [
 ];
 
 interface PopularProductsProps {
-  onAddToCart: (product: { id: number; name: string; price: number; image: string }) => void;
+  onAddToCart: (product: Product) => void;
 }
 
 export function PopularProducts({ onAddToCart }: PopularProductsProps) {

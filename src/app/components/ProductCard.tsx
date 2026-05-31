@@ -1,29 +1,41 @@
+'use client'
+
 import { ShoppingCart, Star, Heart } from "lucide-react";
 import { useState } from "react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 
 export interface Product {
-  id: number;
+  id: string;
   name: string;
-  brand: string;
+  brand: { name: string } | string;
   compatible: string;
   price: number;
   originalPrice: number;
   rating: number;
   reviews: number;
   badge?: string;
-  image: string;
-  category: string;
+  image: { url: string } | string;
+  category: { code: string } | string;
 }
 
 interface ProductCardProps {
   product: Product;
-  onAddToCart: (product: { id: number; name: string; price: number; image: string }) => void;
+  onAddToCart: (product: Product) => void;
 }
 
 export function ProductCard({ product, onAddToCart }: ProductCardProps) {
   const [wished, setWished] = useState(false);
-  const discount = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+  const discount = product.originalPrice && product.originalPrice > product.price
+    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+    : 0;
+
+  const brandName = typeof product.brand === "object" && product.brand !== null
+    ? product.brand.name
+    : (product.brand || "HAKAI MOTIVES");
+
+  const imageUrl = typeof product.image === "object" && product.image !== null
+    ? product.image.url
+    : (product.image || "");
 
   return (
     <div
@@ -35,7 +47,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
       {/* Image wrapper */}
       <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
         <ImageWithFallback
-          src={product.image}
+          src={imageUrl}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
@@ -46,9 +58,9 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
           style={{ background: "rgba(0,0,0,0.5)" }}
         >
           <button
-            onClick={() => onAddToCart({ id: product.id, name: product.name, price: product.price, image: product.image })}
+            onClick={() => onAddToCart(product)}
             className="flex items-center gap-2 px-4 py-2 rounded transition-all duration-200"
-            style={{ background: "#e8192c", color: "#fff", fontFamily: "Rajdhani, sans-serif", fontWeight: 700, fontSize: "12px", letterSpacing: "2px" }}
+            style={{ background: "#e8192c", color: "#fff", fontFamily: "Rajdhani, sans-serif", fontWeight: 700, fontSize: "12px", letterSpacing: "2px", border: "none", cursor: "pointer" }}
             onMouseEnter={e => (e.currentTarget.style.background = "#c0000f")}
             onMouseLeave={e => (e.currentTarget.style.background = "#e8192c")}
           >
@@ -74,7 +86,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
         <button
           onClick={() => setWished(!wished)}
           className="absolute top-2 right-2 w-7 h-7 flex items-center justify-center rounded-full transition-all duration-200"
-          style={{ background: wished ? "#e8192c" : "rgba(0,0,0,0.5)" }}
+          style={{ background: wished ? "#e8192c" : "rgba(0,0,0,0.5)", border: "none", cursor: "pointer" }}
         >
           <Heart size={12} color="#fff" fill={wished ? "#fff" : "none"} />
         </button>
@@ -83,7 +95,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
       {/* Content */}
       <div className="p-3 flex flex-col flex-1">
         <div className="mb-1" style={{ fontFamily: "Inter, sans-serif", color: "#e8192c", fontSize: "9px", fontWeight: 600, letterSpacing: "2px" }}>
-          {product.brand}
+          {brandName}
         </div>
         <p className="mb-1 flex-1" style={{ fontFamily: "Rajdhani, sans-serif", color: "#ddd", fontWeight: 600, fontSize: "13px", lineHeight: 1.4 }}>
           {product.name}
@@ -99,12 +111,12 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
               <Star
                 key={s}
                 size={10}
-                fill={s <= Math.floor(product.rating) ? "#e8192c" : "none"}
-                color={s <= Math.floor(product.rating) ? "#e8192c" : "#444"}
+                fill={s <= Math.floor(product.rating || 5) ? "#e8192c" : "none"}
+                color={s <= Math.floor(product.rating || 5) ? "#e8192c" : "#444"}
               />
             ))}
           </div>
-          <span style={{ fontFamily: "Inter, sans-serif", color: "#555", fontSize: "10px" }}>({product.reviews})</span>
+          <span style={{ fontFamily: "Inter, sans-serif", color: "#555", fontSize: "10px" }}>({product.reviews || 0})</span>
         </div>
 
         {/* Price */}
@@ -113,16 +125,16 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
             <span style={{ fontFamily: "Rajdhani, sans-serif", color: "#fff", fontWeight: 700, fontSize: "16px" }}>
               PKR {product.price.toLocaleString()}
             </span>
-            {product.originalPrice > product.price && (
+            {product.originalPrice && product.originalPrice > product.price && (
               <span className="ml-2" style={{ fontFamily: "Inter, sans-serif", color: "#444", fontSize: "11px", textDecoration: "line-through" }}>
                 {product.originalPrice.toLocaleString()}
               </span>
             )}
           </div>
           <button
-            onClick={() => onAddToCart({ id: product.id, name: product.name, price: product.price, image: product.image })}
+            onClick={() => onAddToCart(product)}
             className="w-8 h-8 flex items-center justify-center rounded transition-all duration-200"
-            style={{ background: "#e8192c" }}
+            style={{ background: "#e8192c", border: "none", cursor: "pointer" }}
             onMouseEnter={e => (e.currentTarget.style.background = "#c0000f")}
             onMouseLeave={e => (e.currentTarget.style.background = "#e8192c")}
           >

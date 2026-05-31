@@ -1,9 +1,12 @@
-import { useState } from "react";
+'use client'
+
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X, ExternalLink, Calendar, Wrench, MessageCircle } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 
 interface Project {
-  id: number;
+  id: string;
   title: string;
   category: "TOYOTA COROLLA" | "HONDA CIVIC" | "TOYOTA YARIS" | "HONDA BRV";
   image: string;
@@ -18,9 +21,9 @@ interface Project {
   };
 }
 
-const projects: Project[] = [
+const STATIC_PROJECTS: Project[] = [
   {
-    id: 1,
+    id: "1",
     title: "Honda Civic 'Cyber Edition'",
     category: "HONDA CIVIC",
     image: "https://images.unsplash.com/photo-1617469767053-d3b508a0d7f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
@@ -35,7 +38,7 @@ const projects: Project[] = [
     },
   },
   {
-    id: 2,
+    id: "2",
     title: "Toyota Corolla 'Stealth Shadow'",
     category: "TOYOTA COROLLA",
     image: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
@@ -49,7 +52,7 @@ const projects: Project[] = [
     },
   },
   {
-    id: 3,
+    id: "3",
     title: "Toyota Yaris 'Track Edition'",
     category: "TOYOTA YARIS",
     image: "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
@@ -62,7 +65,7 @@ const projects: Project[] = [
     },
   },
   {
-    id: 4,
+    id: "4",
     title: "Honda BR-V 'Adventure Explorer'",
     category: "HONDA BRV",
     image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
@@ -75,48 +78,65 @@ const projects: Project[] = [
       lighting: "Starlight Roof and Door Trim Kit",
     },
   },
-  {
-    id: 5,
-    title: "Honda Civic 'Redline Racer'",
-    category: "HONDA CIVIC",
-    image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    description: "A red-accented visual monster that features Hakai Motives premium carbon trims and custom red lighting configurations.",
-    date: "January 2026",
-    partsUsed: ["Full Body Kit", "Carbon Side Mirror Covers", "Trunk Lip Spoiler"],
-    specs: {
-      wheels: "19\" Forged Chrome Rims",
-      bodyKit: "V3 Aggressive Aero Package",
-      interior: "Red Carbon Inlays",
-    },
-  },
-  {
-    id: 6,
-    title: "Toyota Corolla 'Grand Tourer'",
-    category: "TOYOTA COROLLA",
-    image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    description: "A luxury modification package prioritizing clean lines, executive carbon interior trim, and premium multi-link rims.",
-    date: "December 2025",
-    partsUsed: ["Carbon Fiber Steering Wheel", "Carbon Side Mirror Covers"],
-    specs: {
-      wheels: "18\" Premium Concave Wheels",
-      interior: "Custom Heated Carbon Steering Wheel",
-    },
-  },
 ];
 
 const categories = ["ALL BUILDS", "TOYOTA COROLLA", "HONDA CIVIC", "TOYOTA YARIS", "HONDA BRV"];
 
-export function ProjectGallery() {
+interface ProjectGalleryProps {
+  projects?: any[];
+  whatsapp?: string;
+}
+
+export function ProjectGallery({ projects, whatsapp = "923001234567" }: ProjectGalleryProps) {
   const [selectedCategory, setSelectedCategory] = useState("ALL BUILDS");
-  const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [activeProject, setActiveProject] = useState<any | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (activeProject) {
+      const originalOverflow = window.getComputedStyle(document.body).overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [activeProject]);
+
+  const galleryList = projects && projects.length > 0
+    ? projects.map(p => {
+        const imageUrl = typeof p.image === "object" && p.image !== null ? p.image.url : p.image;
+        const parts = Array.isArray(p.partsUsed)
+          ? p.partsUsed.map((x: any) => typeof x === "object" ? x.part : x)
+          : [];
+        return {
+          id: p.id || p._id,
+          title: p.title,
+          category: p.category,
+          image: imageUrl,
+          description: p.description,
+          date: p.date,
+          partsUsed: parts,
+          specs: {
+            wheels: p.wheels,
+            bodyKit: p.bodyKit,
+            interior: p.interior,
+            lighting: p.lighting
+          }
+        };
+      })
+    : STATIC_PROJECTS;
 
   const filteredProjects = selectedCategory === "ALL BUILDS"
-    ? projects
-    : projects.filter(p => p.category === selectedCategory);
+    ? galleryList
+    : galleryList.filter(p => p.category === selectedCategory);
 
   const handleWhatsAppInquiry = (projectTitle: string) => {
     const text = encodeURIComponent(`Hi Hakai Motives! I am interested in getting a custom build package similar to: "${projectTitle}". Please share pricing and details.`);
-    window.open(`https://wa.me/923001234567?text=${text}`, "_blank");
+    window.open(`https://wa.me/${whatsapp}?text=${text}`, "_blank");
   };
 
   return (
@@ -252,7 +272,7 @@ export function ProjectGallery() {
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-1.5 mt-4">
-                  {project.partsUsed.slice(0, 2).map((part, i) => (
+                  {project.partsUsed.slice(0, 2).map((part: string, i: number) => (
                     <span
                       key={i}
                       className="px-2 py-0.5 rounded text-[10px]"
@@ -286,8 +306,8 @@ export function ProjectGallery() {
         </div>
       </div>
 
-      {/* Lightbox / Build Detail Overlay Modal */}
-      {activeProject && (
+      {/* Lightbox Modal */}
+      {activeProject && mounted && createPortal(
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
           style={{ background: "rgba(0,0,0,0.85)", backdropFilter: "blur(8px)" }}
@@ -384,7 +404,7 @@ export function ProjectGallery() {
                     INSTALLED HAKAI MOTIVES PARTS:
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {activeProject.partsUsed.map((part, i) => (
+                    {activeProject.partsUsed.map((part: string, i: number) => (
                       <span
                         key={i}
                         className="px-2.5 py-1 rounded text-xs"
@@ -433,6 +453,7 @@ export function ProjectGallery() {
                   fontFamily: "Space Grotesk, sans-serif",
                   fontSize: "13px",
                   cursor: "pointer",
+                  border: "none",
                 }}
                 onMouseEnter={e => (e.currentTarget.style.background = "#c0000f")}
                 onMouseLeave={e => (e.currentTarget.style.background = "#e8192c")}
@@ -442,7 +463,7 @@ export function ProjectGallery() {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
     </section>
   );
 }

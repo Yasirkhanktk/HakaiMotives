@@ -1,10 +1,10 @@
+'use client'
+
 import { useState, useEffect } from "react";
 import { ChevronRight, ArrowDown } from "lucide-react";
 
 const carModels = ["ALL MODELS", "TOYOTA COROLLA", "HONDA CIVIC", "TOYOTA YARIS", "HONDA BRV"];
-
-const TYPEWRITER_WORDS = ["Bumpers", "Spoilers", "Rims", "Body Kits", "Carbon Fiber", "Ambient Lights"];
-
+const DEFAULT_TYPEWRITER = ["Bumpers", "Spoilers", "Rims", "Body Kits", "Carbon Fiber", "Ambient Lights"];
 const TICKER_WORDS = ["Performance", "Aesthetics", "Precision", "Power", "Style", "Innovation"];
 
 const TYPE_SPEED = 80;
@@ -12,14 +12,21 @@ const DELETE_SPEED = 45;
 const PAUSE_AFTER_TYPE = 1800;
 const PAUSE_AFTER_DELETE = 400;
 
+interface HeroProps {
+  titleLine1?: string;
+  titleLine2Static?: string;
+  typewriterWords?: { word: string }[];
+  subcopy?: string;
+}
+
 function useTypewriter(words: string[]) {
   const [display, setDisplay] = useState("");
   const [wordIdx, setWordIdx] = useState(0);
   const [phase, setPhase] = useState<"typing" | "pausing" | "deleting" | "waiting">("typing");
 
   useEffect(() => {
+    if (!words.length) return;
     const currentWord = words[wordIdx];
-
     let timeout: ReturnType<typeof setTimeout>;
 
     switch (phase) {
@@ -62,12 +69,22 @@ function useTypewriter(words: string[]) {
   return display;
 }
 
-export function Hero() {
+export function Hero({
+  titleLine1 = "Redefine Your Ride.",
+  titleLine2Static = "Upgrade Your",
+  typewriterWords,
+  subcopy = "Premium modification parts — body kits, spoilers, ambient lighting & performance upgrades for Toyota, Honda & more."
+}: HeroProps) {
   const [activeModel, setActiveModel] = useState("ALL MODELS");
   const [scrollY, setScrollY] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [tickerIndex, setTickerIndex] = useState(0);
-  const typedWord = useTypewriter(TYPEWRITER_WORDS);
+
+  const typewriterList = typewriterWords && typewriterWords.length > 0
+    ? typewriterWords.map(w => w.word)
+    : DEFAULT_TYPEWRITER;
+
+  const typedWord = useTypewriter(typewriterList);
 
   useEffect(() => {
     setLoaded(true);
@@ -89,7 +106,7 @@ export function Hero() {
       className="relative overflow-hidden pt-16"
       style={{ background: "#080808", minHeight: "100vh" }}
     >
-      {/* ── Background illustration ── */}
+      {/* Background illustration */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -107,7 +124,7 @@ export function Hero() {
       <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 55% 50% at 50% 48%, transparent 0%, #080808 78%)" }} />
       <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to bottom, #080808 0%, transparent 15%, transparent 78%, #080808 100%)" }} />
 
-      {/* ── SVG tachometer rings ── */}
+      {/* SVG tachometer rings */}
       <div
         className="absolute pointer-events-none"
         style={{
@@ -147,7 +164,7 @@ export function Hero() {
       <div className="absolute pointer-events-none" style={{ top: "58%", right: 0, width: "80px", height: "1px", background: "linear-gradient(to left, transparent, rgba(232,25,44,0.2), transparent)" }} />
       <div className="absolute pointer-events-none" style={{ top: "60%", right: 0, width: "50px", height: "1px", background: "linear-gradient(to left, transparent, rgba(232,25,44,0.1), transparent)" }} />
 
-      {/* ── Main content ── */}
+      {/* Main content */}
       <div
         className="relative z-10 flex flex-col items-center justify-center text-center px-6"
         style={{ minHeight: "calc(100vh - 64px)", paddingTop: "48px", paddingBottom: "48px" }}
@@ -172,7 +189,7 @@ export function Hero() {
           </span>
         </div>
 
-        {/* ── Headline with typewriter ── */}
+        {/* Headline with typewriter */}
         <h1
           style={{
             margin: "0 0 12px 0",
@@ -182,7 +199,7 @@ export function Hero() {
             transition: "all 1s cubic-bezier(0.16,1,0.3,1) 0.35s",
           }}
         >
-          {/* Line 1 — static */}
+          {/* Line 1 */}
           <span style={{
             display: "block",
             fontFamily: "'Space Grotesk', sans-serif",
@@ -190,10 +207,10 @@ export function Hero() {
             fontWeight: 700, lineHeight: 1.08, letterSpacing: "-2px",
             color: "#ffffff",
           }}>
-            Redefine Your Ride.
+            {titleLine1}
           </span>
 
-          {/* Line 2 — "Upgrade Your" + typewriter word */}
+          {/* Line 2 */}
           <span style={{
             display: "flex", alignItems: "baseline", justifyContent: "center",
             gap: "clamp(6px, 1vw, 14px)",
@@ -202,7 +219,7 @@ export function Hero() {
             fontWeight: 700, lineHeight: 1.15, letterSpacing: "-2px",
             flexWrap: "wrap",
           }}>
-            <span style={{ color: "rgba(255,255,255,0.2)" }}>Upgrade Your</span>
+            <span style={{ color: "rgba(255,255,255,0.2)" }}>{titleLine2Static}</span>
             <span style={{
               display: "inline-flex", alignItems: "baseline",
               color: "#e8192c",
@@ -229,7 +246,7 @@ export function Hero() {
           </span>
         </h1>
 
-        {/* ── Rotating ticker ── */}
+        {/* Rotating ticker */}
         <div
           style={{
             display: "flex", alignItems: "center", gap: "12px",
@@ -291,11 +308,10 @@ export function Hero() {
             transition: "all 0.8s cubic-bezier(0.16,1,0.3,1) 0.85s",
           }}
         >
-          Premium modification parts — body kits, spoilers, ambient lighting
-          &amp; performance upgrades for Toyota, Honda &amp; more.
+          {subcopy}
         </p>
 
-        {/* ── CTA Buttons ── */}
+        {/* CTA Buttons */}
         <div
           style={{
             display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap",
@@ -378,7 +394,7 @@ export function Hero() {
         </div>
       </div>
 
-      {/* ── Model filter bar ── */}
+      {/* Model filter bar */}
       <div className="relative z-10 border-t" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
         <div className="max-w-7xl mx-auto px-6">
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", overflowX: "auto" }}>

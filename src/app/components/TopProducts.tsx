@@ -1,20 +1,27 @@
+'use client'
+
 import { ChevronRight, Zap } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { ProductCard, Product } from "./ProductCard";
 
-const featuredProduct = {
-  title: "FULL BODY KIT",
-  subtitle: "Honda Civic 2022+",
+const STATIC_FEATURED = {
+  id: "8",
+  name: "FULL BODY KIT",
+  brand: "HAKAI MOTIVES",
+  compatible: "Honda Civic 2022+",
   description: "Complete aerodynamic transformation — front lip, side skirts, rear diffuser & trunk spoiler. Precision-molded ABS plastic for perfect fitment.",
   price: 35000,
   originalPrice: 45000,
+  rating: 4.9,
+  reviews: 14,
   image: "https://images.unsplash.com/photo-1771979623985-760ea16186d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=900",
   features: ["ABS Plastic", "Primer Ready", "Direct Bolt-On", "OEM Fitment"],
+  category: "bumpers",
 };
 
-const topProducts: Product[] = [
+const STATIC_TOP: Product[] = [
   {
-    id: 9,
+    id: "9",
     name: "Front Bumper Grille Insert",
     brand: "HAKAI MOTIVES",
     compatible: "Toyota Corolla 2019+",
@@ -27,7 +34,7 @@ const topProducts: Product[] = [
     category: "bumpers",
   },
   {
-    id: 10,
+    id: "10",
     name: "Chrome Delete Side Mirrors",
     brand: "HAKAI MOTIVES",
     compatible: "Honda Civic 2016-2021",
@@ -39,7 +46,7 @@ const topProducts: Product[] = [
     category: "mirrors",
   },
   {
-    id: 11,
+    id: "11",
     name: "Carbon Fiber Steering (Flat Bottom)",
     brand: "HAKAI MOTIVES",
     compatible: "Universal (with Adapter)",
@@ -52,7 +59,7 @@ const topProducts: Product[] = [
     category: "interior",
   },
   {
-    id: 12,
+    id: "12",
     name: "Rear GT Spoiler Wing",
     brand: "HAKAI MOTIVES",
     compatible: "Toyota Corolla / Honda Civic",
@@ -67,10 +74,22 @@ const topProducts: Product[] = [
 ];
 
 interface TopProductsProps {
-  onAddToCart: (product: { id: number; name: string; price: number; image: string }) => void;
+  onAddToCart: (product: Product) => void;
+  featuredProduct?: Product;
+  topProducts?: Product[];
+  whatsapp?: string;
 }
 
-export function TopProducts({ onAddToCart }: TopProductsProps) {
+export function TopProducts({ onAddToCart, featuredProduct, topProducts, whatsapp = "923001234567" }: TopProductsProps) {
+  const activeFeatured = featuredProduct || (STATIC_FEATURED as any);
+  const activeTopList = topProducts && topProducts.length > 0 ? topProducts : STATIC_TOP;
+
+  const featuredImg = typeof activeFeatured.image === "object" && activeFeatured.image !== null
+    ? activeFeatured.image.url
+    : (activeFeatured.image || "");
+
+  const featuredFeatures = activeFeatured.features || ["ABS Plastic", "Primer Ready", "Direct Bolt-On", "OEM Fitment"];
+
   return (
     <section id="top-products" className="py-20" style={{ background: "#0d0d0d" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -92,8 +111,8 @@ export function TopProducts({ onAddToCart }: TopProductsProps) {
             style={{ background: "#111", border: "1px solid #1e1e1e", minHeight: "400px" }}
           >
             <ImageWithFallback
-              src={featuredProduct.image}
-              alt={featuredProduct.title}
+              src={featuredImg}
+              alt={activeFeatured.name}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.4) 60%, transparent 100%)" }} />
@@ -104,16 +123,16 @@ export function TopProducts({ onAddToCart }: TopProductsProps) {
                 <span style={{ fontFamily: "Inter, sans-serif", color: "#e8192c", fontSize: "10px", fontWeight: 600, letterSpacing: "2px" }}>FEATURED</span>
               </div>
               <h3 style={{ fontFamily: "Rajdhani, sans-serif", color: "#fff", fontWeight: 700, fontSize: "28px", letterSpacing: "2px" }}>
-                {featuredProduct.title}
+                {activeFeatured.name}
               </h3>
               <p style={{ fontFamily: "Inter, sans-serif", color: "#e8192c", fontSize: "12px" }} className="mb-3">
-                {featuredProduct.subtitle}
+                {activeFeatured.compatible}
               </p>
               <p style={{ fontFamily: "Inter, sans-serif", color: "#aaa", fontSize: "13px", lineHeight: 1.6 }} className="mb-4">
-                {featuredProduct.description}
+                {activeFeatured.description || "Aggressive aerodynamics and customized visual configurations."}
               </p>
               <div className="flex flex-wrap gap-2 mb-5">
-                {featuredProduct.features.map((f) => (
+                {featuredFeatures.map((f: string) => (
                   <span
                     key={f}
                     className="px-2.5 py-1 rounded-full"
@@ -126,16 +145,18 @@ export function TopProducts({ onAddToCart }: TopProductsProps) {
               <div className="flex items-center justify-between">
                 <div>
                   <span style={{ fontFamily: "Rajdhani, sans-serif", color: "#fff", fontWeight: 700, fontSize: "22px" }}>
-                    PKR {featuredProduct.price.toLocaleString()}
+                    PKR {activeFeatured.price.toLocaleString()}
                   </span>
-                  <span className="ml-2" style={{ fontFamily: "Inter, sans-serif", color: "#555", fontSize: "13px", textDecoration: "line-through" }}>
-                    {featuredProduct.originalPrice.toLocaleString()}
-                  </span>
+                  {activeFeatured.originalPrice && activeFeatured.originalPrice > activeFeatured.price && (
+                    <span className="ml-2" style={{ fontFamily: "Inter, sans-serif", color: "#555", fontSize: "13px", textDecoration: "line-through" }}>
+                      {activeFeatured.originalPrice.toLocaleString()}
+                    </span>
+                  )}
                 </div>
                 <button
-                  onClick={() => onAddToCart({ id: 8, name: featuredProduct.title, price: featuredProduct.price, image: featuredProduct.image })}
+                  onClick={() => onAddToCart(activeFeatured)}
                   className="flex items-center gap-2 px-5 py-2.5 rounded transition-all duration-200"
-                  style={{ background: "#e8192c", color: "#fff", fontFamily: "Rajdhani, sans-serif", fontWeight: 700, fontSize: "12px", letterSpacing: "2px" }}
+                  style={{ background: "#e8192c", color: "#fff", fontFamily: "Rajdhani, sans-serif", fontWeight: 700, fontSize: "12px", letterSpacing: "2px", border: "none", cursor: "pointer" }}
                   onMouseEnter={e => (e.currentTarget.style.background = "#c0000f")}
                   onMouseLeave={e => (e.currentTarget.style.background = "#e8192c")}
                 >
@@ -147,7 +168,7 @@ export function TopProducts({ onAddToCart }: TopProductsProps) {
 
           {/* 4 product cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {topProducts.map((product) => (
+            {activeTopList.map((product) => (
               <ProductCard key={product.id} product={product} onAddToCart={onAddToCart} />
             ))}
           </div>
@@ -167,7 +188,7 @@ export function TopProducts({ onAddToCart }: TopProductsProps) {
             </p>
           </div>
           <a
-            href="https://wa.me/923001234567"
+            href={`https://wa.me/${whatsapp}`}
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-3 px-6 py-3 rounded-lg whitespace-nowrap transition-all duration-200"

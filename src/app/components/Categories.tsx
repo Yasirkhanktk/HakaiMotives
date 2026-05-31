@@ -1,62 +1,73 @@
+'use client'
+
 import { ChevronRight } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { useRouter } from "next/navigation";
 
-const categories = [
+export interface Category {
+  id: string;
+  name: string;
+  code: string;
+  image: { url: string } | string;
+  count?: number;
+}
+
+const STATIC_CATEGORIES = [
   {
-    id: 1,
+    id: "1",
     name: "BUMPERS & BODY KITS",
     code: "bumpers",
     image: "https://images.unsplash.com/photo-1714860098789-67680153a942?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400",
     count: 48,
-    accent: "#e8192c",
   },
   {
-    id: 2,
+    id: "2",
     name: "MIRROR COVERS",
     code: "mirrors",
     image: "https://images.unsplash.com/photo-1565001151547-999ff6ccddd2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400",
     count: 32,
-    accent: "#e8192c",
   },
   {
-    id: 3,
+    id: "3",
     name: "AMBIENT LIGHTING",
     code: "lighting",
     image: "https://images.unsplash.com/photo-1720929633046-f171051f30ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400",
     count: 24,
-    accent: "#e8192c",
   },
   {
-    id: 4,
+    id: "4",
     name: "SPOILERS & WINGS",
     code: "spoilers",
     image: "https://images.unsplash.com/photo-1777014586209-05ad0b7c5670?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400",
     count: 36,
-    accent: "#e8192c",
   },
   {
-    id: 5,
+    id: "5",
     name: "RIMS & WHEELS",
     code: "wheels",
     image: "https://images.unsplash.com/photo-1558556579-a8fef2bf1861?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400",
     count: 60,
-    accent: "#e8192c",
   },
   {
-    id: 6,
+    id: "6",
     name: "CARBON INTERIOR",
     code: "interior",
     image: "https://images.unsplash.com/photo-1779263724552-a859e99e8678?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400",
     count: 18,
-    accent: "#e8192c",
   },
 ];
 
 interface CategoriesProps {
-  onCategorySelect: (categoryCode: string) => void;
+  categories?: Category[];
 }
 
-export function Categories({ onCategorySelect }: CategoriesProps) {
+export function Categories({ categories }: CategoriesProps) {
+  const router = useRouter();
+  
+  const categoryList = categories && categories.length > 0
+    ? categories
+    : STATIC_CATEGORIES;
+
   return (
     <section id="categories" className="py-20" style={{ background: "#0d0d0d" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -72,7 +83,7 @@ export function Categories({ onCategorySelect }: CategoriesProps) {
             </h2>
           </div>
           <button
-            onClick={() => onCategorySelect("all")}
+            onClick={() => router.push("/products")}
             className="hidden sm:flex items-center gap-2 transition-colors duration-200"
             style={{ border: "none", background: "none", fontFamily: "Space Grotesk, sans-serif", color: "#666", fontWeight: 600, fontSize: "12px", letterSpacing: "2px", textDecoration: "none", cursor: "pointer" }}
             onMouseEnter={e => (e.currentTarget.style.color = "#e8192c")}
@@ -84,8 +95,8 @@ export function Categories({ onCategorySelect }: CategoriesProps) {
 
         {/* Categories Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          {categories.map((cat) => (
-            <CategoryCard key={cat.id} category={cat} onClick={() => onCategorySelect(cat.code)} />
+          {categoryList.map((cat) => (
+            <CategoryCard key={cat.id} category={cat} onClick={() => router.push(`/products?category=${cat.code}`)} />
           ))}
         </div>
       </div>
@@ -93,7 +104,11 @@ export function Categories({ onCategorySelect }: CategoriesProps) {
   );
 }
 
-function CategoryCard({ category, onClick }: { category: typeof categories[0]; onClick: () => void }) {
+function CategoryCard({ category, onClick }: { category: Category; onClick: () => void }) {
+  const imageUrl = typeof category.image === "object" && category.image !== null
+    ? category.image.url
+    : (category.image || "");
+
   return (
     <div
       className="group cursor-pointer rounded-lg overflow-hidden relative"
@@ -105,18 +120,20 @@ function CategoryCard({ category, onClick }: { category: typeof categories[0]; o
       {/* Image */}
       <div className="relative overflow-hidden h-36">
         <ImageWithFallback
-          src={category.image}
+          src={imageUrl}
           alt={category.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%)" }} />
         {/* Count badge */}
-        <div
-          className="absolute top-2 right-2 px-2 py-0.5 rounded-full"
-          style={{ background: "rgba(232,25,44,0.9)", fontFamily: "Inter, sans-serif", color: "#fff", fontSize: "9px", fontWeight: 600 }}
-        >
-          {category.count}+
-        </div>
+        {typeof category.count !== "undefined" && (
+          <div
+            className="absolute top-2 right-2 px-2 py-0.5 rounded-full"
+            style={{ background: "rgba(232,25,44,0.9)", fontFamily: "Inter, sans-serif", color: "#fff", fontSize: "9px", fontWeight: 600 }}
+          >
+            {category.count}+
+          </div>
+        )}
       </div>
 
       {/* Name */}

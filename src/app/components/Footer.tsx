@@ -1,6 +1,19 @@
-import { Instagram, MessageCircle, Mail, MapPin, Phone, ChevronRight } from "lucide-react";
+'use client'
 
-export function Footer() {
+import { Instagram, MessageCircle, Mail, MapPin, Phone, ChevronRight } from "lucide-react";
+import Link from "next/link";
+
+interface FooterProps {
+  footerText?: string;
+  instagram?: string;
+  whatsapp?: string;
+}
+
+export function Footer({ 
+  footerText = "Hakai Motives. Premium visual upgrades. Est. Pakistan.", 
+  instagram = "https://www.instagram.com", 
+  whatsapp = "923001234567" 
+}: FooterProps) {
   const categories = ["Bumpers & Body Kits", "Mirror Covers", "Ambient Lighting", "Spoilers & Wings", "Rims & Wheels", "Carbon Interior"];
   const carModels = ["Toyota Corolla", "Honda Civic", "Toyota Yaris", "Honda BRV", "Honda City"];
 
@@ -30,11 +43,11 @@ export function Footer() {
               </div>
             </div>
             <p style={{ fontFamily: "Inter, sans-serif", color: "#555", fontSize: "13px", lineHeight: 1.8 }} className="mb-5">
-              Premium automotive modification parts by Hassan Nawaz. Specializing in body kits, spoilers, rims & interior upgrades for Toyota & Honda vehicles.
+              {footerText}
             </p>
             <div className="flex gap-3">
               <a
-                href="https://www.instagram.com"
+                href={instagram}
                 target="_blank"
                 rel="noreferrer"
                 className="w-9 h-9 flex items-center justify-center rounded transition-all duration-200"
@@ -45,7 +58,7 @@ export function Footer() {
                 <Instagram size={16} />
               </a>
               <a
-                href="https://wa.me/923001234567"
+                href={`https://wa.me/${whatsapp}`}
                 target="_blank"
                 rel="noreferrer"
                 className="w-9 h-9 flex items-center justify-center rounded transition-all duration-200"
@@ -75,8 +88,8 @@ export function Footer() {
             <ul className="flex flex-col gap-2.5">
               {categories.map((cat) => (
                 <li key={cat}>
-                  <a
-                    href="#categories"
+                  <Link
+                    href="/products"
                     className="flex items-center gap-2 transition-colors duration-200"
                     style={{ fontFamily: "Inter, sans-serif", color: "#555", fontSize: "13px", textDecoration: "none" }}
                     onMouseEnter={e => { e.currentTarget.style.color = "#e8192c"; }}
@@ -84,7 +97,7 @@ export function Footer() {
                   >
                     <ChevronRight size={12} />
                     {cat}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -98,8 +111,8 @@ export function Footer() {
             <ul className="flex flex-col gap-2.5">
               {carModels.map((car) => (
                 <li key={car}>
-                  <a
-                    href="#products"
+                  <Link
+                    href="/products"
                     className="flex items-center gap-2 transition-colors duration-200"
                     style={{ fontFamily: "Inter, sans-serif", color: "#555", fontSize: "13px", textDecoration: "none" }}
                     onMouseEnter={e => { e.currentTarget.style.color = "#e8192c"; }}
@@ -107,7 +120,7 @@ export function Footer() {
                   >
                     <ChevronRight size={12} />
                     {car}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -123,14 +136,14 @@ export function Footer() {
                 <Phone size={14} color="#e8192c" style={{ flexShrink: 0, marginTop: "2px" }} />
                 <div>
                   <p style={{ fontFamily: "Inter, sans-serif", color: "#888", fontSize: "11px", letterSpacing: "1px", marginBottom: "2px" }}>WHATSAPP</p>
-                  <a href="https://wa.me/923001234567" style={{ fontFamily: "Inter, sans-serif", color: "#aaa", fontSize: "13px", textDecoration: "none" }}>+92 300 1234567</a>
+                  <a href={`https://wa.me/${whatsapp}`} style={{ fontFamily: "Inter, sans-serif", color: "#aaa", fontSize: "13px", textDecoration: "none" }}>+{whatsapp}</a>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <Instagram size={14} color="#e8192c" style={{ flexShrink: 0, marginTop: "2px" }} />
                 <div>
                   <p style={{ fontFamily: "Inter, sans-serif", color: "#888", fontSize: "11px", letterSpacing: "1px", marginBottom: "2px" }}>INSTAGRAM</p>
-                  <a href="https://www.instagram.com" target="_blank" rel="noreferrer" style={{ fontFamily: "Inter, sans-serif", color: "#aaa", fontSize: "13px", textDecoration: "none" }}>@hakaimotives</a>
+                  <a href={instagram} target="_blank" rel="noreferrer" style={{ fontFamily: "Inter, sans-serif", color: "#aaa", fontSize: "13px", textDecoration: "none" }}>Instagram Page</a>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -156,7 +169,7 @@ export function Footer() {
       <div className="border-t" style={{ borderColor: "#111" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p style={{ fontFamily: "Inter, sans-serif", color: "#333", fontSize: "12px" }}>
-            © 2026 Hakai Motives by Hassan Nawaz. All rights reserved.
+            © 2026 Hakai Motives. All rights reserved.
           </p>
           <p style={{ fontFamily: "Inter, sans-serif", color: "#333", fontSize: "12px" }}>
             Designed for car enthusiasts across Pakistan.
