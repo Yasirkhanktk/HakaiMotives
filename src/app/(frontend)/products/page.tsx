@@ -18,7 +18,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
 
   let products: any[] = []
   let categories: any[] = []
-  let whatsapp = '923001234567'
+  let whatsapp = '923490090074'
 
   try {
     const payload = await getPayload({ config: configPromise })

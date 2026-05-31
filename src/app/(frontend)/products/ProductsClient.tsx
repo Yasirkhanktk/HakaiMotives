@@ -19,7 +19,7 @@ export function ProductsClient({
   initialQuery = "",
   products: databaseProducts,
   categories: databaseCategories,
-  whatsapp = "923001234567"
+  whatsapp = "923490090074"
 }: ProductsClientProps) {
   const router = useRouter();
 

@@ -34,7 +34,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   let siteContent = {
-    whatsappNumber: '923001234567',
+    whatsappNumber: '923490090074',
     instagramUrl: 'https://www.instagram.com',
     footerText: 'Hakai Motives. Premium visual upgrades. Est. Pakistan.',
   }

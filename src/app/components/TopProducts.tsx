@@ -80,7 +80,7 @@ interface TopProductsProps {
   whatsapp?: string;
 }
 
-export function TopProducts({ onAddToCart, featuredProduct, topProducts, whatsapp = "923001234567" }: TopProductsProps) {
+export function TopProducts({ onAddToCart, featuredProduct, topProducts, whatsapp = "923490090074" }: TopProductsProps) {
   const activeFeatured = featuredProduct || (STATIC_FEATURED as any);
   const activeTopList = topProducts && topProducts.length > 0 ? topProducts : STATIC_TOP;
 

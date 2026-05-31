@@ -12,7 +12,7 @@ interface FooterProps {
 export function Footer({ 
   footerText = "Hakai Motives. Premium visual upgrades. Est. Pakistan.", 
   instagram = "https://www.instagram.com", 
-  whatsapp = "923001234567" 
+  whatsapp = "923490090074" 
 }: FooterProps) {
   const categories = ["Bumpers & Body Kits", "Mirror Covers", "Ambient Lighting", "Spoilers & Wings", "Rims & Wheels", "Carbon Interior"];
   const carModels = ["Toyota Corolla", "Honda Civic", "Toyota Yaris", "Honda BRV", "Honda City"];

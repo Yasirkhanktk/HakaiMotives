@@ -7,7 +7,7 @@ interface WhatsAppButtonProps {
   whatsapp?: string;
 }
 
-export function WhatsAppButton({ whatsapp = "923001234567" }: WhatsAppButtonProps) {
+export function WhatsAppButton({ whatsapp = "923490090074" }: WhatsAppButtonProps) {
   const [expanded, setExpanded] = useState(false);
 
   return (

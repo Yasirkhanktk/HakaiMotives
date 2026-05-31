@@ -11,7 +11,7 @@ export const WebsiteContent: GlobalConfig = {
       name: 'whatsappNumber',
       type: 'text',
       required: true,
-      defaultValue: '923001234567',
+      defaultValue: '923490090074',
     },
     {
       name: 'instagramUrl',

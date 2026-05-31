@@ -19,7 +19,7 @@ interface AddressForm {
   city: string;
 }
 
-export function Cart({ whatsapp = "923001234567" }: CartProps) {
+export function Cart({ whatsapp = "923490090074" }: CartProps) {
   const {
     cartOpen: isOpen,
     setCartOpen,

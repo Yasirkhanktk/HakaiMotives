@@ -11,7 +11,7 @@ interface NavbarProps {
   instagram?: string;
 }
 
-export function Navbar({ whatsapp = "923001234567", instagram = "https://www.instagram.com" }: NavbarProps) {
+export function Navbar({ whatsapp = "923490090074", instagram = "https://www.instagram.com" }: NavbarProps) {
   const { cartCount, setCartOpen } = useCart();
   const router = useRouter();
   const pathname = usePathname();

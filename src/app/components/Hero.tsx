@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { ChevronRight, ArrowDown } from "lucide-react";
 
-const carModels = ["ALL MODELS", "TOYOTA COROLLA", "HONDA CIVIC", "TOYOTA YARIS", "HONDA BRV"];
+
 const DEFAULT_TYPEWRITER = ["Bumpers", "Spoilers", "Rims", "Body Kits", "Carbon Fiber", "Ambient Lights"];
 const TICKER_WORDS = ["Performance", "Aesthetics", "Precision", "Power", "Style", "Innovation"];
 
@@ -75,7 +75,6 @@ export function Hero({
   typewriterWords,
   subcopy = "Premium modification parts — body kits, spoilers, ambient lighting & performance upgrades for Toyota, Honda & more."
 }: HeroProps) {
-  const [activeModel, setActiveModel] = useState("ALL MODELS");
   const [scrollY, setScrollY] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [tickerIndex, setTickerIndex] = useState(0);
@@ -395,36 +394,6 @@ export function Hero({
         </div>
       </div>
 
-      {/* Model filter bar */}
-      <div className="relative z-10 border-t" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", overflowX: "auto" }}>
-            <span style={{ fontFamily: "Outfit, sans-serif", color: "#333", fontSize: "9px", letterSpacing: "2px", whiteSpace: "nowrap", paddingRight: "20px", textTransform: "uppercase" }}>
-              Filter by Model:
-            </span>
-            {carModels.map((model) => (
-              <button
-                key={model}
-                onClick={() => setActiveModel(model)}
-                style={{
-                  fontFamily: "Outfit, sans-serif",
-                  color: activeModel === model ? "#e8192c" : "#444",
-                  fontWeight: activeModel === model ? 600 : 400,
-                  fontSize: "10px", letterSpacing: "1.5px",
-                  background: "transparent", border: "none", cursor: "pointer",
-                  padding: "13px 16px", whiteSpace: "nowrap",
-                  borderBottom: activeModel === model ? "1.5px solid #e8192c" : "1.5px solid transparent",
-                  transition: "all 0.2s ease", textTransform: "uppercase",
-                }}
-                onMouseEnter={(e) => { if (activeModel !== model) e.currentTarget.style.color = "#777"; }}
-                onMouseLeave={(e) => { if (activeModel !== model) e.currentTarget.style.color = "#444"; }}
-              >
-                {model}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* Keyframes */}
       <style>{`

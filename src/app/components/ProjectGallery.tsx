@@ -87,7 +87,7 @@ interface ProjectGalleryProps {
   whatsapp?: string;
 }
 
-export function ProjectGallery({ projects, whatsapp = "923001234567" }: ProjectGalleryProps) {
+export function ProjectGallery({ projects, whatsapp = "923490090074" }: ProjectGalleryProps) {
   const [selectedCategory, setSelectedCategory] = useState("ALL BUILDS");
   const [activeProject, setActiveProject] = useState<any | null>(null);
   const [mounted, setMounted] = useState(false);

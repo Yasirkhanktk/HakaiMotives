@@ -20,7 +20,7 @@ const COLORS = [
   { name: "Redline Edition", value: "#e8192c", border: "#900" }
 ];
 
-export function ProductModal({ product, onClose, whatsapp = "923001234567" }: ProductModalProps) {
+export function ProductModal({ product, onClose, whatsapp = "923490090074" }: ProductModalProps) {
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState(COLORS[0].name);
