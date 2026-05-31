@@ -89,6 +89,7 @@ export const Orders: CollectionConfig = {
               </div>
             `;
 
+            req.payload.logger.info(`Attempting to send order confirmation email to ${doc.customerEmail}...`);
             await req.payload.sendEmail({
               to: doc.customerEmail,
               subject: 'Your Hakai Motives Order Confirmation',
