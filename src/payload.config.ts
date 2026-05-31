@@ -43,7 +43,7 @@ export default buildConfig({
       },
     },
     meta: {
-      titleSuffix: '- Hakai Motives',
+      titleSuffix: '- HakaiMotives',
     },
   },
   collections: [

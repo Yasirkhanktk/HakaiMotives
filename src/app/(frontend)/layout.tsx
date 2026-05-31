@@ -16,14 +16,20 @@ export async function generateMetadata() {
     })
     return {
       title: siteContent.heroTitleLine1
-        ? `${siteContent.heroTitleLine1} | Hakai Motives`
-        : 'Hakai Motives | Premium Auto Parts & Modification Store',
+        ? `${siteContent.heroTitleLine1} | HakaiMotives`
+        : 'HakaiMotives | Premium Auto Parts & Modification Store',
       description: siteContent.heroSubcopy || 'Browse, customize, and order premium visual auto upgrades in Pakistan.',
+      icons: {
+        icon: '/icon.svg',
+      },
     }
   } catch (e) {
     return {
-      title: 'Hakai Motives | Premium Auto Parts & Modification Store',
+      title: 'HakaiMotives | Premium Auto Parts & Modification Store',
       description: 'Browse, customize, and order premium visual auto upgrades in Pakistan.',
+      icons: {
+        icon: '/icon.svg',
+      },
     }
   }
 }
