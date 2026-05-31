@@ -2,7 +2,7 @@ import { getPayload } from 'payload'
 import configPromise from '@/payload.config'
 import { HomeClient } from './HomeClient'
 
-export const revalidate = 0 // Disable cache to keep page dynamic
+export const revalidate = 30 // Cache and revalidate every 30s to keep it fast and dynamic
 
 export default async function HomePage() {
   let siteContent: any = null
@@ -45,7 +45,7 @@ export default async function HomePage() {
           },
         },
         limit: 4,
-        depth: 2,
+        depth: 1,
       })
       topProducts = prodRes.docs
 
@@ -54,7 +54,7 @@ export default async function HomePage() {
         const fallbackProdRes = await payload.find({
           collection: 'products',
           limit: 4,
-          depth: 2,
+          depth: 1,
         })
         topProducts = fallbackProdRes.docs
       }
@@ -72,7 +72,7 @@ export default async function HomePage() {
           },
         },
         limit: 1,
-        depth: 2,
+        depth: 1,
       })
       if (featRes.docs.length > 0) {
         featuredProduct = featRes.docs[0]

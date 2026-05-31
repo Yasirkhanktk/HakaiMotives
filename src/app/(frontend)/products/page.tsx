@@ -2,7 +2,7 @@ import { getPayload } from 'payload'
 import configPromise from '@/payload.config'
 import { ProductsClient } from './ProductsClient'
 
-export const revalidate = 0 // Disable cache to keep page dynamic
+export const revalidate = 30 // Cache and revalidate every 30s to keep it fast and dynamic
 
 interface PageProps {
   searchParams: Promise<{
@@ -28,7 +28,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
       const prodRes = await payload.find({
         collection: 'products',
         limit: 1000,
-        depth: 2,
+        depth: 1,
       })
       products = prodRes.docs
     } catch (e) {
