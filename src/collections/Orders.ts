@@ -114,12 +114,71 @@ export const Orders: CollectionConfig = {
             req.payload.logger.info(`Attempting to send order confirmation email to ${doc.customerEmail}...`);
             await req.payload.sendEmail({
               to: doc.customerEmail,
-              subject: 'Your Hakai Motives Order Confirmation',
+              subject: 'Your HakaiMotives Order Confirmation',
               html: htmlMessage,
             });
             req.payload.logger.info(`Order confirmation email sent to ${doc.customerEmail}`);
+
+            // Send notification email to site owner
+            const ownerEmail = 'yaskhankhattak@gmail.com';
+            const ownerHtmlMessage = `
+              <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e1e1e1; border-radius: 8px;">
+                <div style="text-align: center; padding: 15px 0; border-bottom: 2px solid #e8192c; margin-bottom: 20px;">
+                  <img src="${siteUrl}/api/media/file/logo.png" alt="HakaiMotives Logo" width="80" height="80" style="display: block; margin: 0 auto 10px auto; border-radius: 8px;" />
+                  <div style="font-family: Arial, sans-serif; color: #e8192c; font-weight: 700; font-size: 24px; letter-spacing: 4px; text-transform: uppercase;">
+                    NEW ORDER RECEIVED
+                  </div>
+                </div>
+                
+                <h3 style="color: #111; font-size: 18px; margin-top: 0;">You have received a new order on HakaiMotives!</h3>
+                <p>An order has been successfully placed by <strong>${doc.customerName}</strong>. Below are the details:</p>
+
+                <h4 style="margin-top: 25px; border-bottom: 2px solid #eee; padding-bottom: 8px; color: #111; font-size: 15px; text-transform: uppercase; letter-spacing: 1px;">Customer Information</h4>
+                <p style="margin: 5px 0; font-size: 14px;"><strong>Name:</strong> ${doc.customerName}</p>
+                <p style="margin: 5px 0; font-size: 14px;"><strong>Email:</strong> ${doc.customerEmail}</p>
+                <p style="margin: 5px 0; font-size: 14px;"><strong>Phone:</strong> ${doc.customerPhone}</p>
+                <p style="margin: 5px 0; font-size: 14px;"><strong>Address:</strong> ${doc.customerAddress}, ${doc.customerCity || ''}</p>
+
+                <h4 style="margin-top: 30px; border-bottom: 2px solid #eee; padding-bottom: 8px; color: #111; font-size: 15px; text-transform: uppercase; letter-spacing: 1px;">Order Items</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                  <thead>
+                    <tr style="border-bottom: 2px solid #eee; text-align: left;">
+                      <th style="padding: 10px 0; font-size: 13px; color: #666; text-align: left;">Item</th>
+                      <th style="padding: 10px 0; font-size: 13px; color: #666; text-align: center; width: 60px;">Qty</th>
+                      <th style="padding: 10px 0; font-size: 13px; color: #666; text-align: right; width: 100px;">Price</th>
+                      <th style="padding: 10px 0; font-size: 13px; color: #666; text-align: right; width: 110px;">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${itemsHtml}
+                  </tbody>
+                </table>
+
+                <div style="margin-top: 20px; font-size: 18px; text-align: right; border-top: 1px solid #eee; padding-top: 15px; margin-bottom: 25px;">
+                  <strong>Grand Total: <span style="color: #e8192c;">PKR ${doc.total.toLocaleString()}</span></strong>
+                </div>
+
+                <div style="background: #f9f9f9; padding: 15px; border-left: 4px solid #e8192c; border-radius: 0 4px 4px 0; margin-bottom: 30px;">
+                  <p style="margin: 0; font-size: 14px;"><strong>Payment Method:</strong> ${doc.paymentMethod === 'COD' ? 'Cash on Delivery' : 'Online Payment'}</p>
+                </div>
+
+                <div style="text-align: center; margin-top: 35px; margin-bottom: 15px;">
+                  <a href="${siteUrl}/admin/collections/orders/${doc.id}" style="background-color: #e8192c; color: white; padding: 12px 25px; text-decoration: none; font-weight: bold; border-radius: 4px; font-size: 14px; letter-spacing: 1px; display: inline-block; text-transform: uppercase;">
+                    View Order in Admin Panel
+                  </a>
+                </div>
+              </div>
+            `;
+
+            req.payload.logger.info(`Attempting to send new order owner alert email to ${ownerEmail}...`);
+            await req.payload.sendEmail({
+              to: ownerEmail,
+              subject: `🚨 [HakaiMotives] New Order Received! (${doc.customerName})`,
+              html: ownerHtmlMessage,
+            });
+            req.payload.logger.info(`New order owner alert email sent to ${ownerEmail}`);
           } catch (err) {
-            req.payload.logger.error(`Failed to send order confirmation email: ${err}`);
+            req.payload.logger.error(`Failed to send order confirmation emails: ${err}`);
           }
         }
       }
