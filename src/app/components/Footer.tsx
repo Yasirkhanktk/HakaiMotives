@@ -42,7 +42,7 @@ export function Footer({
                 <span style={{ fontFamily: "Space Grotesk, sans-serif", color: "#ffffff", fontWeight: 600, fontSize: "18px", letterSpacing: "3px" }}> MOTIVES</span>
               </div>
             </div>
-            <p style={{ fontFamily: "Inter, sans-serif", color: "#555", fontSize: "13px", lineHeight: 1.8 }} className="mb-5">
+            <p style={{ fontFamily: "Inter, sans-serif", color: "#aaa", fontSize: "13px", lineHeight: 1.8 }} className="mb-5">
               {footerText}
             </p>
             <div className="flex gap-3">
@@ -51,9 +51,9 @@ export function Footer({
                 target="_blank"
                 rel="noreferrer"
                 className="w-9 h-9 flex items-center justify-center rounded transition-all duration-200"
-                style={{ background: "#141414", border: "1px solid #1e1e1e", color: "#666" }}
+                style={{ background: "#141414", border: "1px solid #1e1e1e", color: "#aaa" }}
                 onMouseEnter={e => { e.currentTarget.style.background = "#e8192c"; e.currentTarget.style.color = "#fff"; e.currentTarget.style.borderColor = "#e8192c"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "#141414"; e.currentTarget.style.color = "#666"; e.currentTarget.style.borderColor = "#1e1e1e"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = "#141414"; e.currentTarget.style.color = "#aaa"; e.currentTarget.style.borderColor = "#1e1e1e"; }}
               >
                 <Instagram size={16} />
               </a>
@@ -62,18 +62,18 @@ export function Footer({
                 target="_blank"
                 rel="noreferrer"
                 className="w-9 h-9 flex items-center justify-center rounded transition-all duration-200"
-                style={{ background: "#141414", border: "1px solid #1e1e1e", color: "#666" }}
+                style={{ background: "#141414", border: "1px solid #1e1e1e", color: "#aaa" }}
                 onMouseEnter={e => { e.currentTarget.style.background = "#25D366"; e.currentTarget.style.color = "#fff"; e.currentTarget.style.borderColor = "#25D366"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "#141414"; e.currentTarget.style.color = "#666"; e.currentTarget.style.borderColor = "#1e1e1e"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = "#141414"; e.currentTarget.style.color = "#aaa"; e.currentTarget.style.borderColor = "#1e1e1e"; }}
               >
                 <MessageCircle size={16} />
               </a>
               <a
                 href="mailto:info@hakaimotives.com"
                 className="w-9 h-9 flex items-center justify-center rounded transition-all duration-200"
-                style={{ background: "#141414", border: "1px solid #1e1e1e", color: "#666" }}
+                style={{ background: "#141414", border: "1px solid #1e1e1e", color: "#aaa" }}
                 onMouseEnter={e => { e.currentTarget.style.background = "#e8192c"; e.currentTarget.style.color = "#fff"; e.currentTarget.style.borderColor = "#e8192c"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "#141414"; e.currentTarget.style.color = "#666"; e.currentTarget.style.borderColor = "#1e1e1e"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = "#141414"; e.currentTarget.style.color = "#aaa"; e.currentTarget.style.borderColor = "#1e1e1e"; }}
               >
                 <Mail size={16} />
               </a>
@@ -91,9 +91,9 @@ export function Footer({
                   <Link
                     href="/products"
                     className="flex items-center gap-2 transition-colors duration-200"
-                    style={{ fontFamily: "Inter, sans-serif", color: "#555", fontSize: "13px", textDecoration: "none" }}
+                    style={{ fontFamily: "Inter, sans-serif", color: "#aaa", fontSize: "13px", textDecoration: "none" }}
                     onMouseEnter={e => { e.currentTarget.style.color = "#e8192c"; }}
-                    onMouseLeave={e => { e.currentTarget.style.color = "#555"; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = "#aaa"; }}
                   >
                     <ChevronRight size={12} />
                     {cat}
@@ -114,9 +114,9 @@ export function Footer({
                   <Link
                     href="/products"
                     className="flex items-center gap-2 transition-colors duration-200"
-                    style={{ fontFamily: "Inter, sans-serif", color: "#555", fontSize: "13px", textDecoration: "none" }}
+                    style={{ fontFamily: "Inter, sans-serif", color: "#aaa", fontSize: "13px", textDecoration: "none" }}
                     onMouseEnter={e => { e.currentTarget.style.color = "#e8192c"; }}
-                    onMouseLeave={e => { e.currentTarget.style.color = "#555"; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = "#aaa"; }}
                   >
                     <ChevronRight size={12} />
                     {car}
@@ -135,29 +135,29 @@ export function Footer({
               <div className="flex items-start gap-3">
                 <Phone size={14} color="#e8192c" style={{ flexShrink: 0, marginTop: "2px" }} />
                 <div>
-                  <p style={{ fontFamily: "Inter, sans-serif", color: "#888", fontSize: "11px", letterSpacing: "1px", marginBottom: "2px" }}>WHATSAPP</p>
-                  <a href={`https://wa.me/${whatsapp}`} style={{ fontFamily: "Inter, sans-serif", color: "#aaa", fontSize: "13px", textDecoration: "none" }}>+{whatsapp}</a>
+                  <p style={{ fontFamily: "Inter, sans-serif", color: "#bbb", fontSize: "11px", letterSpacing: "1px", marginBottom: "2px" }}>WHATSAPP</p>
+                  <a href={`https://wa.me/${whatsapp}`} style={{ fontFamily: "Inter, sans-serif", color: "#eee", fontSize: "13px", textDecoration: "none" }}>+{whatsapp}</a>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <Instagram size={14} color="#e8192c" style={{ flexShrink: 0, marginTop: "2px" }} />
                 <div>
-                  <p style={{ fontFamily: "Inter, sans-serif", color: "#888", fontSize: "11px", letterSpacing: "1px", marginBottom: "2px" }}>INSTAGRAM</p>
-                  <a href={instagram} target="_blank" rel="noreferrer" style={{ fontFamily: "Inter, sans-serif", color: "#aaa", fontSize: "13px", textDecoration: "none" }}>Instagram Page</a>
+                  <p style={{ fontFamily: "Inter, sans-serif", color: "#bbb", fontSize: "11px", letterSpacing: "1px", marginBottom: "2px" }}>INSTAGRAM</p>
+                  <a href={instagram} target="_blank" rel="noreferrer" style={{ fontFamily: "Inter, sans-serif", color: "#eee", fontSize: "13px", textDecoration: "none" }}>Instagram Page</a>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <MapPin size={14} color="#e8192c" style={{ flexShrink: 0, marginTop: "2px" }} />
                 <div>
-                  <p style={{ fontFamily: "Inter, sans-serif", color: "#888", fontSize: "11px", letterSpacing: "1px", marginBottom: "2px" }}>LOCATION</p>
-                  <p style={{ fontFamily: "Inter, sans-serif", color: "#aaa", fontSize: "13px" }}>Pakistan — Nationwide Delivery</p>
+                  <p style={{ fontFamily: "Inter, sans-serif", color: "#bbb", fontSize: "11px", letterSpacing: "1px", marginBottom: "2px" }}>LOCATION</p>
+                  <p style={{ fontFamily: "Inter, sans-serif", color: "#eee", fontSize: "13px" }}>Pakistan — Nationwide Delivery</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <Mail size={14} color="#e8192c" style={{ flexShrink: 0, marginTop: "2px" }} />
                 <div>
-                  <p style={{ fontFamily: "Inter, sans-serif", color: "#888", fontSize: "11px", letterSpacing: "1px", marginBottom: "2px" }}>EMAIL</p>
-                  <a href="mailto:info@hakaimotives.com" style={{ fontFamily: "Inter, sans-serif", color: "#aaa", fontSize: "13px", textDecoration: "none" }}>info@hakaimotives.com</a>
+                  <p style={{ fontFamily: "Inter, sans-serif", color: "#bbb", fontSize: "11px", letterSpacing: "1px", marginBottom: "2px" }}>EMAIL</p>
+                  <a href="mailto:info@hakaimotives.com" style={{ fontFamily: "Inter, sans-serif", color: "#eee", fontSize: "13px", textDecoration: "none" }}>info@hakaimotives.com</a>
                 </div>
               </div>
             </div>
@@ -168,10 +168,10 @@ export function Footer({
       {/* Bottom bar */}
       <div className="border-t" style={{ borderColor: "#111" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p style={{ fontFamily: "Inter, sans-serif", color: "#333", fontSize: "12px" }}>
+          <p style={{ fontFamily: "Inter, sans-serif", color: "#888", fontSize: "12px" }}>
             © 2026 Hakai Motives. All rights reserved.
           </p>
-          <p style={{ fontFamily: "Inter, sans-serif", color: "#333", fontSize: "12px" }}>
+          <p style={{ fontFamily: "Inter, sans-serif", color: "#888", fontSize: "12px" }}>
             Designed for car enthusiasts across Pakistan.
           </p>
         </div>

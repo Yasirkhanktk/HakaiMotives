@@ -177,7 +177,7 @@ export function ProductModal({ product, onClose, whatsapp = "923490090074" }: Pr
               className="mb-4"
               style={{
                 fontFamily: "Outfit, sans-serif",
-                color: "#666666",
+                color: "#888888",
                 fontSize: "12px",
               }}
             >
@@ -196,7 +196,7 @@ export function ProductModal({ product, onClose, whatsapp = "923490090074" }: Pr
                   />
                 ))}
               </div>
-              <span style={{ fontFamily: "Outfit, sans-serif", color: "#555", fontSize: "11px" }}>
+              <span style={{ fontFamily: "Outfit, sans-serif", color: "#888", fontSize: "11px" }}>
                 {product.rating || 5} ({product.reviews || 0} reviews)
               </span>
             </div>
@@ -221,7 +221,7 @@ export function ProductModal({ product, onClose, whatsapp = "923490090074" }: Pr
                   <span
                     style={{
                       fontFamily: "Outfit, sans-serif",
-                      color: "#444",
+                      color: "#777",
                       fontSize: "13px",
                       textDecoration: "line-through",
                     }}

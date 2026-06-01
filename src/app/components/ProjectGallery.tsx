@@ -267,7 +267,7 @@ export function ProjectGallery({ projects, whatsapp = "923490090074" }: ProjectG
                   className="line-clamp-2"
                   style={{
                     fontFamily: "Outfit, sans-serif",
-                    color: "#777777",
+                    color: "#999999",
                     fontSize: "13px",
                     lineHeight: 1.6,
                   }}
@@ -371,7 +371,7 @@ export function ProjectGallery({ projects, whatsapp = "923490090074" }: ProjectG
                   >
                     {activeProject.category}
                   </span>
-                  <div className="flex items-center gap-1.5 text-[11px]" style={{ color: "#555", fontFamily: "Outfit, sans-serif" }}>
+                  <div className="flex items-center gap-1.5 text-[11px]" style={{ color: "#888", fontFamily: "Outfit, sans-serif" }}>
                     <Calendar size={12} />
                     {activeProject.date}
                   </div>
@@ -430,7 +430,7 @@ export function ProjectGallery({ projects, whatsapp = "923490090074" }: ProjectG
 
                 {/* Build Specifications Details */}
                 <div className="mb-6 py-4 px-4 rounded" style={{ background: "#111111", border: "1px solid #1a1a1a" }}>
-                  <div className="text-[11px] font-bold tracking-wider mb-2" style={{ color: "#555", fontFamily: "Space Grotesk, sans-serif" }}>
+                  <div className="text-[11px] font-bold tracking-wider mb-2" style={{ color: "#888", fontFamily: "Space Grotesk, sans-serif" }}>
                     BUILD SPECS:
                   </div>
                   <ul className="flex flex-col gap-2 text-xs" style={{ fontFamily: "Outfit, sans-serif", color: "#aaaaaa" }}>

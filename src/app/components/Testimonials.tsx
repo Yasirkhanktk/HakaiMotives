@@ -233,7 +233,7 @@ export function Testimonials({ testimonials: databaseReviews }: TestimonialsProp
                 <h3 style={{ fontFamily: "Space Grotesk, sans-serif", color: "#fff", fontWeight: 700, fontSize: "20px" }}>
                   REVIEW SUBMITTED SUCCESSFULLY!
                 </h3>
-                <p style={{ fontFamily: "Outfit, sans-serif", color: "#888", fontSize: "14px", marginTop: "8px" }}>
+                <p style={{ fontFamily: "Outfit, sans-serif", color: "#aaa", fontSize: "14px", marginTop: "8px" }}>
                   Thank you for sharing your experience with Hakai Motives.
                 </p>
               </div>
@@ -357,13 +357,13 @@ export function Testimonials({ testimonials: databaseReviews }: TestimonialsProp
               style={{
                 fontFamily: "Space Grotesk, sans-serif",
                 background: selectedRating === rate ? "#e8192c" : "#141414",
-                color: selectedRating === rate ? "#ffffff" : "#888888",
+                color: selectedRating === rate ? "#ffffff" : "#bbbbbb",
                 border: `1px solid ${selectedRating === rate ? "#e8192c" : "#1e1e1e"}`,
                 cursor: "pointer",
               }}
             >
               {rate === "ALL" ? "ALL REVIEWS" : `${rate} STAR`}
-              {rate !== "ALL" && <Star size={10} fill={selectedRating === rate ? "#fff" : "#888"} stroke="none" />}
+              {rate !== "ALL" && <Star size={10} fill={selectedRating === rate ? "#fff" : "#bbb"} stroke="none" />}
             </button>
           ))}
         </div>
@@ -410,7 +410,7 @@ export function Testimonials({ testimonials: databaseReviews }: TestimonialsProp
                       <p
                         style={{
                           fontFamily: "Outfit, sans-serif",
-                          color: "#555",
+                          color: "#888",
                           fontSize: "11px",
                         }}
                       >
@@ -435,7 +435,7 @@ export function Testimonials({ testimonials: databaseReviews }: TestimonialsProp
                       />
                     ))}
                   </div>
-                  <span style={{ fontFamily: "Outfit, sans-serif", color: "#555", fontSize: "11px" }}>
+                  <span style={{ fontFamily: "Outfit, sans-serif", color: "#888", fontSize: "11px" }}>
                     {testimonial.date}
                   </span>
                 </div>

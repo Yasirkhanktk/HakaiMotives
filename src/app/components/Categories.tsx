@@ -85,9 +85,9 @@ export function Categories({ categories }: CategoriesProps) {
           <button
             onClick={() => router.push("/products")}
             className="hidden sm:flex items-center gap-2 transition-colors duration-200"
-            style={{ border: "none", background: "none", fontFamily: "Space Grotesk, sans-serif", color: "#666", fontWeight: 600, fontSize: "12px", letterSpacing: "2px", textDecoration: "none", cursor: "pointer" }}
+            style={{ border: "none", background: "none", fontFamily: "Space Grotesk, sans-serif", color: "#aaa", fontWeight: 600, fontSize: "12px", letterSpacing: "2px", textDecoration: "none", cursor: "pointer" }}
             onMouseEnter={e => (e.currentTarget.style.color = "#e8192c")}
-            onMouseLeave={e => (e.currentTarget.style.color = "#666")}
+            onMouseLeave={e => (e.currentTarget.style.color = "#aaa")}
           >
             VIEW ALL <ChevronRight size={14} />
           </button>

@@ -110,7 +110,7 @@ export function Navbar({ whatsapp = "923490090074", instagram = "https://www.ins
           <div className="flex items-center gap-3">
             {searchOpen ? (
               <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 rounded px-3 py-1.5" style={{ background: "#1a1a1a", border: "1px solid #333" }}>
-                <Search size={14} color="#888" />
+                <Search size={14} color="#ccc" />
                 <input
                   autoFocus
                   value={searchQuery}
@@ -120,16 +120,16 @@ export function Navbar({ whatsapp = "923490090074", instagram = "https://www.ins
                   style={{ width: "160px" }}
                 />
                 <button type="button" onClick={() => { setSearchOpen(false); setSearchQuery(""); }}>
-                  <X size={14} color="#888" />
+                  <X size={14} color="#ccc" />
                 </button>
               </form>
             ) : (
               <button
                 onClick={() => setSearchOpen(true)}
                 className="p-2 rounded transition-colors"
-                style={{ color: "#888", border: "none", background: "none", cursor: "pointer" }}
+                style={{ color: "#ccc", border: "none", background: "none", cursor: "pointer" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "#e8192c")}
-                onMouseLeave={e => (e.currentTarget.style.color = "#888")}
+                onMouseLeave={e => (e.currentTarget.style.color = "#ccc")}
               >
                 <Search size={18} />
               </button>
@@ -140,9 +140,9 @@ export function Navbar({ whatsapp = "923490090074", instagram = "https://www.ins
               target="_blank"
               rel="noreferrer"
               className="p-2 rounded transition-colors hidden sm:flex"
-              style={{ color: "#888" }}
+              style={{ color: "#ccc" }}
               onMouseEnter={e => (e.currentTarget.style.color = "#e8192c")}
-              onMouseLeave={e => (e.currentTarget.style.color = "#888")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#ccc")}
             >
               <Instagram size={18} />
             </a>
@@ -150,9 +150,9 @@ export function Navbar({ whatsapp = "923490090074", instagram = "https://www.ins
             <button
               onClick={() => setCartOpen(true)}
               className="p-2 rounded relative transition-colors"
-              style={{ color: "#888", border: "none", background: "none", cursor: "pointer" }}
+              style={{ color: "#ccc", border: "none", background: "none", cursor: "pointer" }}
               onMouseEnter={e => (e.currentTarget.style.color = "#e8192c")}
-              onMouseLeave={e => (e.currentTarget.style.color = "#888")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#ccc")}
             >
               <ShoppingCart size={18} />
               {cartCount > 0 && (
@@ -167,7 +167,7 @@ export function Navbar({ whatsapp = "923490090074", instagram = "https://www.ins
 
             <button
               className="md:hidden p-2"
-              style={{ color: "#888", border: "none", background: "none", cursor: "pointer" }}
+              style={{ color: "#ccc", border: "none", background: "none", cursor: "pointer" }}
               onClick={() => setMobileOpen(!mobileOpen)}
             >
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}

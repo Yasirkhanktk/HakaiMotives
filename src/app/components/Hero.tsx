@@ -180,11 +180,11 @@ export function Hero({
           }}
         >
           <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#e8192c", boxShadow: "0 0 8px rgba(232,25,44,0.6)", animation: "pulse 2s ease-in-out infinite" }} />
-          <span style={{ fontFamily: "Outfit, sans-serif", color: "rgba(255,255,255,0.35)", fontSize: "11px", fontWeight: 500, letterSpacing: "3px", textTransform: "uppercase" }}>
+          <span style={{ fontFamily: "Outfit, sans-serif", color: "rgba(255,255,255,0.65)", fontSize: "11px", fontWeight: 500, letterSpacing: "3px", textTransform: "uppercase" }}>
             Hakai Motives
           </span>
           <span style={{ width: "20px", height: "1px", background: "rgba(255,255,255,0.15)" }} />
-          <span style={{ fontFamily: "Outfit, sans-serif", color: "rgba(255,255,255,0.2)", fontSize: "11px", fontWeight: 400, letterSpacing: "2px", textTransform: "uppercase" }}>
+          <span style={{ fontFamily: "Outfit, sans-serif", color: "rgba(255,255,255,0.45)", fontSize: "11px", fontWeight: 400, letterSpacing: "2px", textTransform: "uppercase" }}>
             Est. Pakistan
           </span>
         </div>
@@ -219,7 +219,7 @@ export function Hero({
             fontWeight: 700, lineHeight: 1.15, letterSpacing: "-2px",
             flexWrap: "wrap",
           }}>
-            <span style={{ color: "rgba(255,255,255,0.2)" }}>{titleLine2Static}</span>
+            <span style={{ color: "rgba(255,255,255,0.85)" }}>{titleLine2Static}</span>
             <span style={{
               display: "inline-flex", alignItems: "baseline",
               color: "#e8192c",
@@ -265,7 +265,7 @@ export function Hero({
           }}>
             <span style={{
               fontFamily: "Outfit, sans-serif", fontSize: "11px", fontWeight: 400,
-              color: "rgba(255,255,255,0.28)", letterSpacing: "2px", textTransform: "uppercase",
+              color: "rgba(255,255,255,0.6)", letterSpacing: "2px", textTransform: "uppercase",
             }}>
               We Build
             </span>
@@ -299,7 +299,7 @@ export function Hero({
         <p
           style={{
             fontFamily: "Outfit, sans-serif",
-            color: "rgba(255,255,255,0.32)",
+            color: "rgba(255,255,255,0.75)",
             fontSize: "clamp(13px, 1.1vw, 14.5px)",
             lineHeight: 1.75, maxWidth: "420px", fontWeight: 400,
             margin: "0 0 36px 0",
@@ -353,12 +353,12 @@ export function Hero({
             style={{
               display: "inline-flex", alignItems: "center", gap: "8px",
               padding: "13px 32px",
-              border: "1px solid rgba(255,255,255,0.08)",
-              color: "rgba(255,255,255,0.5)",
+              border: "1px solid rgba(255,255,255,0.2)",
+              color: "rgba(255,255,255,0.85)",
               fontFamily: "'Space Grotesk', sans-serif",
               fontWeight: 500, fontSize: "12px", letterSpacing: "2px",
               textDecoration: "none", borderRadius: "4px",
-              background: "rgba(255,255,255,0.02)", transition: "all 0.3s ease",
+              background: "rgba(255,255,255,0.05)", transition: "all 0.3s ease",
               textTransform: "uppercase",
             }}
             onMouseEnter={(e) => {
@@ -368,10 +368,10 @@ export function Hero({
               e.currentTarget.style.background = "rgba(232,25,44,0.04)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
-              e.currentTarget.style.color = "rgba(255,255,255,0.5)";
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
+              e.currentTarget.style.color = "rgba(255,255,255,0.85)";
               e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.background = "rgba(255,255,255,0.02)";
+              e.currentTarget.style.background = "rgba(255,255,255,0.05)";
             }}
           >
             Follow Us
@@ -382,7 +382,7 @@ export function Hero({
         <div
           style={{
             display: "flex", flexDirection: "column", alignItems: "center",
-            gap: "6px", color: "rgba(255,255,255,0.14)",
+            gap: "6px", color: "rgba(255,255,255,0.4)",
             animation: "nudge 2.4s ease-in-out infinite",
             opacity: loaded ? 1 : 0, transition: "opacity 1s ease 1.2s",
           }}

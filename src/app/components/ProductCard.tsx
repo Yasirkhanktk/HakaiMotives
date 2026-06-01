@@ -107,7 +107,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
         <p className="mb-1 flex-1" style={{ fontFamily: "Rajdhani, sans-serif", color: "#ddd", fontWeight: 600, fontSize: "13px", lineHeight: 1.4 }}>
           {product.name}
         </p>
-        <p className="mb-2" style={{ fontFamily: "Inter, sans-serif", color: "#555", fontSize: "10px" }}>
+        <p className="mb-2" style={{ fontFamily: "Inter, sans-serif", color: "#888", fontSize: "10px" }}>
           {product.compatible}
         </p>
 
@@ -123,7 +123,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
               />
             ))}
           </div>
-          <span style={{ fontFamily: "Inter, sans-serif", color: "#555", fontSize: "10px" }}>({product.reviews || 0})</span>
+          <span style={{ fontFamily: "Inter, sans-serif", color: "#888", fontSize: "10px" }}>({product.reviews || 0})</span>
         </div>
 
         {/* Price */}
@@ -133,7 +133,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
               PKR {product.price.toLocaleString()}
             </span>
             {product.originalPrice && product.originalPrice > product.price && (
-              <span className="ml-2" style={{ fontFamily: "Inter, sans-serif", color: "#444", fontSize: "11px", textDecoration: "line-through" }}>
+              <span className="ml-2" style={{ fontFamily: "Inter, sans-serif", color: "#777", fontSize: "11px", textDecoration: "line-through" }}>
                 {product.originalPrice.toLocaleString()}
               </span>
             )}
