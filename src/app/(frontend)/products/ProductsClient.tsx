@@ -5,6 +5,7 @@ import { Search, SlidersHorizontal, ArrowUpDown, ChevronRight, CornerDownLeft, R
 import { ProductCard, Product } from "@/app/components/ProductCard";
 import { ProductModal } from "@/app/components/ProductModal";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface ProductsClientProps {
   initialCategory?: string;
@@ -56,6 +57,11 @@ export function ProductsClient({
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [selectedCategory]);
+
+  // Prefetch the homepage so back-navigation is instant
+  useEffect(() => {
+    router.prefetch("/");
+  }, [router]);
 
   // Map dynamic categories
   const categoryMap = useMemo(() => {
@@ -154,6 +160,17 @@ export function ProductsClient({
     router.push("/");
   };
 
+  // Back to home link for breadcrumb
+  const BackToHomeLink = () => (
+    <Link
+      href="/"
+      className="absolute top-6 left-6 flex items-center gap-2 text-xs font-bold tracking-wider text-neutral-400 hover:text-white transition-colors"
+      style={{ border: "none", background: "none", cursor: "pointer", textDecoration: "none" }}
+    >
+      <CornerDownLeft size={14} /> BACK TO HOME
+    </Link>
+  );
+
   return (
     <div style={{ background: "#080808", minHeight: "100vh", paddingTop: "80px" }}>
       {/* Page Header Banner */}
@@ -168,7 +185,7 @@ export function ProductsClient({
         
         {/* Breadcrumb */}
         <div className="flex items-center justify-center gap-2 mb-4 text-xs font-semibold tracking-wider text-neutral-500 uppercase">
-          <span className="hover:text-white cursor-pointer transition-colors" onClick={handleBackToHome}>Home</span>
+          <Link href="/" className="hover:text-white cursor-pointer transition-colors" style={{ textDecoration: "none", color: "inherit" }}>Home</Link>
           <ChevronRight size={10} />
           <span className="text-red-500">Products</span>
         </div>
@@ -198,13 +215,7 @@ export function ProductsClient({
         </p>
 
         {/* Back Button floating */}
-        <button
-          onClick={handleBackToHome}
-          className="absolute top-6 left-6 flex items-center gap-2 text-xs font-bold tracking-wider text-neutral-400 hover:text-white transition-colors"
-          style={{ border: "none", background: "none", cursor: "pointer" }}
-        >
-          <CornerDownLeft size={14} /> BACK TO HOME
-        </button>
+        <BackToHomeLink />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-20">

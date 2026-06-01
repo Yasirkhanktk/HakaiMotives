@@ -115,22 +115,22 @@ export default async function HomePage() {
     console.error('Payload initialization failed on HomePage:', err)
   }
 
-  // Compute product counts dynamically for each category
+  // Compute product counts efficiently using payload.count() per category
   if (categories.length > 0) {
     try {
       const payload = await getPayload({ config: configPromise })
-      const allProducts = await payload.find({
-        collection: 'products',
-        limit: 1000,
-        depth: 1,
+      const countsPromises = categories.map(async (cat: any) => {
+        const count = await payload.count({
+          collection: 'products',
+          where: {
+            category: {
+              equals: cat.id,
+            },
+          },
+        })
+        return { ...cat, count: count.totalDocs }
       })
-      categories = categories.map((cat: any) => {
-        const count = allProducts.docs.filter((p: any) => {
-          const catId = typeof p.category === 'object' && p.category !== null ? p.category.id : p.category;
-          return catId === cat.id;
-        }).length;
-        console.log("CAT:", cat.name, typeof cat.image === "object" ? cat.image?.url : cat.image); return { ...cat, count };
-      })
+      categories = await Promise.all(countsPromises)
     } catch (err) {
       console.error('Failed to compute category counts:', err)
     }

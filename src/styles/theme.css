@@ -214,3 +214,33 @@
 .animate-fade-in {
   animation: modalFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+@keyframes skeletonPulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.15;
+  }
+}
+
+.skeleton {
+  background: #1a1a1a;
+  border-radius: 6px;
+  animation: skeletonPulse 1.6s ease-in-out infinite;
+}
+
+.skeleton-text {
+  background: #1a1a1a;
+  border-radius: 4px;
+  animation: skeletonPulse 1.6s ease-in-out infinite;
+  height: 12px;
+}
+
+.skeleton-card {
+  background: #111;
+  border: 1px solid #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  animation: skeletonPulse 1.6s ease-in-out infinite;
+}

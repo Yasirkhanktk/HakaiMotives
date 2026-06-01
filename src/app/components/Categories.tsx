@@ -2,7 +2,7 @@
 
 import { ChevronRight } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export interface Category {
   id: string;
@@ -62,7 +62,6 @@ interface CategoriesProps {
 }
 
 export function Categories({ categories }: CategoriesProps) {
-  const router = useRouter();
   
   const categoryList = categories && categories.length > 0
     ? categories
@@ -82,21 +81,21 @@ export function Categories({ categories }: CategoriesProps) {
               CATEGORIES
             </h2>
           </div>
-          <button
-            onClick={() => router.push("/products")}
+          <Link
+            href="/products"
             className="hidden sm:flex items-center gap-2 transition-colors duration-200"
             style={{ border: "none", background: "none", fontFamily: "Space Grotesk, sans-serif", color: "#aaa", fontWeight: 600, fontSize: "12px", letterSpacing: "2px", textDecoration: "none", cursor: "pointer" }}
             onMouseEnter={e => (e.currentTarget.style.color = "#e8192c")}
             onMouseLeave={e => (e.currentTarget.style.color = "#aaa")}
           >
             VIEW ALL <ChevronRight size={14} />
-          </button>
+          </Link>
         </div>
 
         {/* Categories Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {categoryList.map((cat) => (
-            <CategoryCard key={cat.id} category={cat} onClick={() => router.push(`/products?category=${cat.code}`)} />
+            <CategoryCard key={cat.id} category={cat} href={`/products?category=${cat.code}`} />
           ))}
         </div>
       </div>
@@ -104,18 +103,18 @@ export function Categories({ categories }: CategoriesProps) {
   );
 }
 
-function CategoryCard({ category, onClick }: { category: Category; onClick: () => void }) {
+function CategoryCard({ category, href }: { category: Category; href: string }) {
   const imageUrl = typeof category.image === "object" && category.image !== null
     ? category.image.url
     : (category.image || "");
 
   return (
-    <div
-      className="group cursor-pointer rounded-lg overflow-hidden relative"
-      style={{ background: "#141414", border: "1px solid #1e1e1e" }}
+    <Link
+      href={href}
+      className="group cursor-pointer rounded-lg overflow-hidden relative block"
+      style={{ background: "#141414", border: "1px solid #1e1e1e", textDecoration: "none" }}
       onMouseEnter={e => { (e.currentTarget.style.borderColor = "#e8192c"); }}
       onMouseLeave={e => { (e.currentTarget.style.borderColor = "#1e1e1e"); }}
-      onClick={onClick}
     >
       {/* Image */}
       <div className="relative overflow-hidden h-36">
@@ -146,6 +145,6 @@ function CategoryCard({ category, onClick }: { category: Category; onClick: () =
           style={{ background: "#e8192c" }}
         />
       </div>
-    </div>
+    </Link>
   );
 }
