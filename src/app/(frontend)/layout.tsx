@@ -8,6 +8,9 @@ import { Footer } from '@/app/components/Footer'
 import { Cart } from '@/app/components/Cart'
 import { WhatsAppButton } from '@/app/components/WhatsAppButton'
 
+import { RootSplashScreen } from '@/app/components/RootSplashScreen'
+import HomeLoading from './loading'
+
 export async function generateMetadata() {
   try {
     const payload = await getPayload({ config: configPromise })
@@ -34,11 +37,7 @@ export async function generateMetadata() {
   }
 }
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+async function LayoutContent({ children }: { children: React.ReactNode }) {
   let siteContent = {
     whatsappNumber: '923490090074',
     instagramUrl: 'https://www.instagram.com',
@@ -58,14 +57,29 @@ export default async function RootLayout({
   }
 
   return (
+    <>
+      <Navbar whatsapp={siteContent.whatsappNumber} instagram={siteContent.instagramUrl} />
+      <main style={{ minHeight: 'calc(100vh - 200px)' }}>{children}</main>
+      <Footer footerText={siteContent.footerText} instagram={siteContent.instagramUrl} whatsapp={siteContent.whatsappNumber} />
+      <Cart whatsapp={siteContent.whatsappNumber} />
+      <WhatsAppButton whatsapp={siteContent.whatsappNumber} />
+    </>
+  )
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
     <html lang="en">
       <body style={{ backgroundColor: '#0a0a0a', color: '#ffffff', minHeight: '100vh', margin: 0, fontFamily: 'Outfit, sans-serif' }}>
+        <RootSplashScreen />
         <CartProvider>
-          <Navbar whatsapp={siteContent.whatsappNumber} instagram={siteContent.instagramUrl} />
-          <main style={{ minHeight: 'calc(100vh - 200px)' }}>{children}</main>
-          <Footer footerText={siteContent.footerText} instagram={siteContent.instagramUrl} whatsapp={siteContent.whatsappNumber} />
-          <Cart whatsapp={siteContent.whatsappNumber} />
-          <WhatsAppButton whatsapp={siteContent.whatsappNumber} />
+          <React.Suspense fallback={<HomeLoading />}>
+            <LayoutContent>{children}</LayoutContent>
+          </React.Suspense>
         </CartProvider>
       </body>
     </html>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Hero } from "@/app/components/Hero";
 import { Categories } from "@/app/components/Categories";
 import { TopProducts } from "@/app/components/TopProducts";
@@ -8,6 +8,7 @@ import { ProjectGallery } from "@/app/components/ProjectGallery";
 import { Testimonials } from "@/app/components/Testimonials";
 import { ProductModal } from "@/app/components/ProductModal";
 import { Product } from "@/app/components/ProductCard";
+import { SplashScreen } from "@/app/components/SplashScreen";
 
 interface HomeClientProps {
   siteContent: any;
